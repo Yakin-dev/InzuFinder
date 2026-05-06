@@ -2,26 +2,297 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-forest: #0d4f2e;
+    --color-forest-dark: #0a3d23;
+    --color-forest-light: #166534;
+    --color-emerald: #16a34a;
+    --color-emerald-hover: #15803d;
+    --color-warm-white: #fafaf9;
+    --color-surface: 255 255 255;
+    --color-bg: 250 250 249;
+    --color-text: 17 24 39;
+    --color-muted: 107 114 128;
+    --color-border: 229 231 235;
+    --shadow-card: 0 1px 3px rgba(0,0,0,0.05), 0 4px 16px rgba(0,0,0,0.04);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06);
+    --shadow-glow: 0 0 20px rgba(22,163,74,0.15);
+    --radius: 12px;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
+    background-color: var(--color-warm-white);
+    color: rgb(var(--color-text));
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* === Primary Buttons with Gradient === */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 font-semibold rounded-xl
+    active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-white;
+    background: linear-gradient(135deg, #0d4f2e 0%, #16a34a 100%);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+    box-shadow: 0 4px 14px rgba(13, 79, 46, 0.3);
+    transform: scale(1.02);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-gray-800 font-semibold rounded-xl border border-gray-200 hover:border-[#16a34a] hover:text-[#0d4f2e] active:scale-95 transition-all duration-200;
+  }
+  .btn-secondary:hover {
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.1);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 text-gray-600 font-medium rounded-lg hover:bg-gray-100 transition-all duration-200;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 bg-red-50 text-red-600 font-medium rounded-lg hover:bg-red-100 transition-all duration-200;
+  }
+
+  /* === Cards === */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    overflow: hidden;
+    border: 1px solid transparent;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+    border-color: rgba(22, 163, 74, 0.15);
+  }
+
+  /* === Form Elements === */
+  .form-input {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16a34a] focus:border-transparent transition-all duration-200;
+  }
+
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-1.5;
+  }
+
+  .form-error {
+    @apply text-sm text-red-600 mt-1.5 flex items-center gap-1;
+  }
+
+  /* === Badges === */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-verified {
+    @apply badge bg-green-100 text-green-700;
+  }
+
+  .badge-pending {
+    @apply badge bg-yellow-100 text-yellow-700;
+  }
+
+  .badge-approved {
+    @apply badge bg-green-100 text-green-700;
+  }
+
+  .badge-rejected {
+    @apply badge bg-red-100 text-red-700;
+  }
+
+  .badge-type {
+    @apply badge bg-blue-100 text-blue-700;
+  }
+
+  .badge-featured {
+    @apply badge bg-amber-100 text-amber-700;
+  }
+
+  /* === Section Containers === */
+  .container-app {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section {
+    @apply py-16;
+  }
+
+  /* === Loading States === */
+  .skeleton {
+    @apply animate-pulse bg-gray-200 rounded-lg;
+  }
+
+  /* === Search Bar === */
+  .search-bar {
+    @apply flex items-center gap-3 bg-white rounded-2xl shadow-lg border border-gray-100 px-4 py-3;
+  }
+
+  /* === Navigation === */
+  .nav-link {
+    @apply text-gray-600 font-medium hover:text-[#0d4f2e] transition-colors duration-200 text-sm relative;
+  }
+
+  .nav-link-active {
+    @apply text-[#0d4f2e] font-semibold;
+  }
+  .nav-link-active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #0d4f2e, #16a34a);
+    border-radius: 1px;
+  }
+
+  /* === Property Card Price Tag === */
+  .price-tag {
+    @apply absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg font-bold text-gray-900 text-sm shadow-sm;
+  }
+
+  /* === Stats Card === */
+  .stat-card {
+    @apply card p-6 flex items-center gap-4;
+  }
+
+  .stat-icon {
+    @apply w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0;
+  }
+
+  /* === Table Styles === */
+  .admin-table {
+    @apply w-full text-sm;
+  }
+
+  .admin-table th {
+    @apply px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider bg-gray-50 first:rounded-tl-xl last:rounded-tr-xl;
+  }
+
+  .admin-table td {
+    @apply px-4 py-3 border-t border-gray-100;
+  }
+
+  .admin-table tr:hover td {
+    @apply bg-gray-50/50;
+  }
+
+  /* === Page Header === */
+  .page-header {
+    @apply bg-white border-b border-gray-100 sticky top-0 z-50;
+  }
+
+  /* === Glassmorphism Navbar === */
+  .navbar-glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+  }
+
+  /* === Hero Gradient === */
+  .hero-gradient {
+    background: linear-gradient(135deg, #0d4f2e 0%, #0a3d23 40%, #166534 100%);
+  }
+
+  /* === Hero Overlay === */
+  .hero-overlay {
+    background: linear-gradient(to top, #0d4f2e 0%, rgba(13,79,46,0.6) 60%, transparent 100%);
+  }
+
+  /* === Glassmorphism Search === */
+  .glass-search {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* === Smooth Image === */
+  .house-image {
+    @apply w-full h-full object-cover transition-transform duration-500 group-hover:scale-105;
+  }
+
+  /* === Divider === */
+  .divider {
+    @apply border-t border-gray-100 my-6;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* === Custom Scrollbar === */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* === Animations === */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* === Leaflet Map Overrides === */
+.leaflet-container {
+  border-radius: var(--radius);
+  z-index: 0;
 }

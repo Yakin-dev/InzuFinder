@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+enum Role {
+  TENANT
+  LANDLORD
+  ADMIN
+}
+
+enum ListingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  STUDIO
+  VILLA
+}
+
+model User {
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  password    String
+  role        Role      @default(TENANT)
+  phone       String?
+  bio         String?
+  avatar      String?
+  isVerified  Boolean   @default(false)
+  isDisabled  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  houses      House[]
+  bookings    Booking[]
+  reports     Report[]
+}
+
+model House {
+  id          String        @id @default(cuid())
+  title       String
+  description String
+  price       Int
+  location    String
+  district    String
+  type        PropertyType  @default(HOUSE)
+  bedrooms    Int
+  bathrooms   Int
+  size        Int?          // square meters
+  floor       Int?
+  furnished   Boolean       @default(false)
+  isFeatured  Boolean       @default(false)
+  viewCount   Int           @default(0)
+  status      ListingStatus @default(PENDING)
+  expiresAt   DateTime?
+  landlordId  String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  landlord    User          @relation(fields: [landlordId], references: [id], onDelete: Cascade)
+  images      HouseImage[]
+  bookings    Booking[]
+  reports     Report[]
+}
+
+model HouseImage {
+  id        String   @id @default(cuid())
+  url       String
+  publicId  String?
+  houseId   String
+  createdAt DateTime @default(now())
+
+  house     House    @relation(fields: [houseId], references: [id], onDelete: Cascade)
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  tenantId    String
+  houseId     String
+  message     String?
+  phone       String?
+  status      BookingStatus @default(PENDING)
+  moveInDate  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  tenant      User          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  house       House         @relation(fields: [houseId], references: [id], onDelete: Cascade)
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  reporterId  String
+  houseId     String
+  reason      String
+  details     String?
+  resolved    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  reporter    User     @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+  house       House    @relation(fields: [houseId], references: [id], onDelete: Cascade)
+}
