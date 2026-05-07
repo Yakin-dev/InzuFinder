@@ -6,7 +6,9 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { Eye, EyeSlash, EnvelopeSimple, Lock, User, Phone, House, SpinnerGap } from '@phosphor-icons/react'
 
-export default function RegisterPage() {
+import { Suspense } from 'react'
+
+function RegisterContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const defaultRole = searchParams.get('role') === 'LANDLORD' ? 'LANDLORD' : 'TENANT'
@@ -242,5 +244,13 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><SpinnerGap size={32} className="animate-spin text-[#0d4f2e]" /></div>}>
+      <RegisterContent />
+    </Suspense>
   )
 }

@@ -34,7 +34,9 @@ const DISTRICTS = ['Gasabo', 'Kicukiro', 'Nyarugenge']
 const TYPES = ['HOUSE', 'APARTMENT', 'STUDIO', 'VILLA']
 const BEDROOMS = [1, 2, 3, 4, 5]
 
-export default function HousesPage() {
+import { Suspense } from 'react'
+
+function HousesContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -287,6 +289,20 @@ export default function HousesPage() {
       </main>
       <Footer />
     </>
+  )
+}
+
+export default function HousesPage() {
+  return (
+    <Suspense fallback={
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="h-72 bg-gray-200 rounded-xl animate-pulse" />
+        ))}
+      </div>
+    }>
+      <HousesContent />
+    </Suspense>
   )
 }
 
