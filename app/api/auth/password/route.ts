@@ -3,6 +3,8 @@ import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import { getSessionFromRequest } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
 // PUT /api/auth/password — change password
 export async function PUT(req: NextRequest) {
   try {

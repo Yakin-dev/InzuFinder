@@ -6,8 +6,13 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import HouseCard from '@/components/houses/HouseCard'
 import { HouseCardSkeleton } from '@/components/HouseCardSkeleton'
-import { MagnifyingGlass, Funnel, SortAscending, X, MapPin, CaretLeft, CaretRight, SlidersHorizontal } from '@phosphor-icons/react'
+import dynamic from 'next/dynamic'
+import { MagnifyingGlass, Funnel, SortAscending, X, MapPin, CaretLeft, CaretRight, SlidersHorizontal, MapTrifold, SquaresFour } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
+import { useCompareStore } from '@/hooks/useCompare'
+
+const MapView = dynamic(() => import('@/components/MapView').then((m) => m.MapView), { ssr: false })
 
 interface House {
   id: string
@@ -22,6 +27,8 @@ interface House {
   status: string
   size?: number | null
   isFeatured?: boolean
+  lat?: number | null
+  lng?: number | null
   images: { url: string }[]
   landlord: { name: string; isVerified: boolean }
 }
@@ -34,7 +41,7 @@ interface Pagination {
 }
 
 const DISTRICTS = ['Gasabo', 'Kicukiro', 'Nyarugenge']
-const TYPES = ['HOUSE', 'APARTMENT', 'STUDIO', 'VILLA']
+const TYPES = ['HOUSE', 'APARTMENT', 'STUDIO', 'ROOM', 'VILLA', 'SHOP', 'OFFICE', 'WAREHOUSE', 'HALL', 'RESTAURANT']
 const BEDROOMS = [1, 2, 3, 4, 5]
 
 export default function HousesContent() {
@@ -44,14 +51,20 @@ export default function HousesContent() {
   const [pagination, setPagination] = useState<Pagination | null>(null)
   const [loading, setLoading] = useState(true)
   const [mobileFilters, setMobileFilters] = useState(false)
+  const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid')
+  const { ids: compareIds, clear: clearCompare } = useCompareStore()
 
   const [filters, setFilters] = useState({
     district: searchParams.get('district') || '',
     type: searchParams.get('type') || '',
+    category: searchParams.get('category') || '',
     minPrice: searchParams.get('minPrice') || '',
     maxPrice: searchParams.get('maxPrice') || '',
     bedrooms: searchParams.get('bedrooms') || '',
     furnished: searchParams.get('furnished') || '',
+    hasParking: searchParams.get('hasParking') || '',
+    nearMainRoad: searchParams.get('nearMainRoad') || '',
+    footTraffic: searchParams.get('footTraffic') || '',
     search: searchParams.get('search') || '',
     sort: searchParams.get('sort') || '',
     page: Number(searchParams.get('page') || '1'),
@@ -95,11 +108,36 @@ export default function HousesContent() {
   }
 
   const clearFilters = () => {
-    setFilters({ district: '', type: '', minPrice: '', maxPrice: '', bedrooms: '', furnished: '', search: '', sort: '', page: 1 })
+    setFilters({
+      district: '',
+      type: '',
+      category: '',
+      minPrice: '',
+      maxPrice: '',
+      bedrooms: '',
+      furnished: '',
+      hasParking: '',
+      nearMainRoad: '',
+      footTraffic: '',
+      search: '',
+      sort: '',
+      page: 1,
+    })
     router.push('/houses')
   }
 
-  const hasActiveFilters = filters.district || filters.type || filters.minPrice || filters.maxPrice || filters.bedrooms || filters.furnished || filters.search
+  const hasActiveFilters =
+    filters.district ||
+    filters.type ||
+    filters.category ||
+    filters.minPrice ||
+    filters.maxPrice ||
+    filters.bedrooms ||
+    filters.furnished ||
+    filters.hasParking ||
+    filters.nearMainRoad ||
+    filters.footTraffic ||
+    filters.search
 
   return (
     <>
@@ -189,6 +227,24 @@ export default function HousesContent() {
                     <option value="price_desc">Price: High to Low</option>
                   </select>
                 </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('grid')}
+                  className={`btn-secondary !px-3 !py-2 text-sm flex items-center gap-2 ${viewMode === 'grid' ? 'border-green-200 text-[#0d4f2e]' : ''}`}
+                >
+                  <SquaresFour size={16} />
+                  Grid
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('map')}
+                  className={`btn-secondary !px-3 !py-2 text-sm flex items-center gap-2 ${viewMode === 'map' ? 'border-green-200 text-[#0d4f2e]' : ''}`}
+                >
+                  <MapTrifold size={16} />
+                  Map
+                </button>
+              </div>
                 {pagination && <span className="text-sm text-gray-500">{pagination.total} properties</span>}
               </div>
 
@@ -196,18 +252,22 @@ export default function HousesContent() {
                 <HouseCardSkeleton count={6} />
               ) : houses.length > 0 ? (
                 <>
-                  <motion.div
-                    className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
-                    initial="hidden"
-                    animate="visible"
-                    variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
-                  >
-                    {houses.map((house, i) => (
-                      <motion.div key={house.id} variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}>
-                        <HouseCard house={house} index={i} />
-                      </motion.div>
-                    ))}
-                  </motion.div>
+                  {viewMode === 'map' ? (
+                    <MapView houses={houses} />
+                  ) : (
+                    <motion.div
+                      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
+                      initial="hidden"
+                      animate="visible"
+                      variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+                    >
+                      {houses.map((house, i) => (
+                        <motion.div key={house.id} variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.4 } } }}>
+                          <HouseCard house={house} index={i} />
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  )}
                   {pagination && pagination.totalPages > 1 && (
                     <div className="flex justify-center items-center gap-2 mt-10">
                       <button onClick={() => setFilters((p) => ({ ...p, page: p.page - 1 }))} disabled={filters.page === 1} className="btn-secondary disabled:opacity-40 px-4 py-2 text-sm flex items-center gap-1"><CaretLeft size={14} />Previous</button>
@@ -230,6 +290,30 @@ export default function HousesContent() {
           </div>
         </div>
       </main>
+      {compareIds.length >= 2 && (
+        <div className="fixed bottom-4 left-0 right-0 z-[80] flex justify-center px-4">
+          <div className="w-full max-w-2xl bg-[#0d4f2e] text-white rounded-2xl shadow-2xl px-4 py-3 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 min-w-0">
+              <SquaresFour size={18} weight="duotone" />
+              <span className="text-sm font-semibold truncate">
+                Compare ({compareIds.length}) listings →
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Link href="/compare" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl text-sm font-semibold">
+                View
+              </Link>
+              <button
+                type="button"
+                onClick={clearCompare}
+                className="inline-flex items-center justify-center px-3 py-2 rounded-xl text-sm font-semibold bg-white/10 hover:bg-white/20"
+              >
+                Clear
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <Footer />
     </>
   )
@@ -257,12 +341,61 @@ function FilterContent({
       </div>
       <div className="divider !my-0" />
       <div>
+        <label className="form-label">Category</label>
+        <select value={filters.category as string} onChange={(e) => updateFilter('category', e.target.value)} className="form-input" id="filter-category">
+          <option value="">All</option>
+          <option value="RESIDENTIAL">Residential</option>
+          <option value="COMMERCIAL">Commercial</option>
+        </select>
+      </div>
+      <div className="divider !my-0" />
+      <div>
         <label className="form-label">Property Type</label>
         <select value={filters.type as string} onChange={(e) => updateFilter('type', e.target.value)} className="form-input" id="filter-type">
           <option value="">All Types</option>
           {TYPES.map((t) => (<option key={t} value={t}>{t.charAt(0) + t.slice(1).toLowerCase()}</option>))}
         </select>
       </div>
+      {filters.category === 'COMMERCIAL' && (
+        <>
+          <div className="divider !my-0" />
+          <div>
+            <label className="form-label">Parking</label>
+            <div className="flex gap-2">
+              <button onClick={() => updateFilter('hasParking', filters.hasParking === 'true' ? '' : 'true')} className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${filters.hasParking === 'true' ? 'bg-[#0d4f2e] text-white' : 'bg-gray-100 text-gray-600 hover:bg-green-50'}`}>
+                Yes
+              </button>
+              <button onClick={() => updateFilter('hasParking', filters.hasParking === 'false' ? '' : 'false')} className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${filters.hasParking === 'false' ? 'bg-[#0d4f2e] text-white' : 'bg-gray-100 text-gray-600 hover:bg-green-50'}`}>
+                No
+              </button>
+            </div>
+          </div>
+
+          <div className="divider !my-0" />
+          <div>
+            <label className="form-label">Road Access</label>
+            <div className="flex gap-2">
+              <button onClick={() => updateFilter('nearMainRoad', filters.nearMainRoad === 'true' ? '' : 'true')} className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${filters.nearMainRoad === 'true' ? 'bg-[#0d4f2e] text-white' : 'bg-gray-100 text-gray-600 hover:bg-green-50'}`}>
+                Near
+              </button>
+              <button onClick={() => updateFilter('nearMainRoad', filters.nearMainRoad === 'false' ? '' : 'false')} className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${filters.nearMainRoad === 'false' ? 'bg-[#0d4f2e] text-white' : 'bg-gray-100 text-gray-600 hover:bg-green-50'}`}>
+                Far
+              </button>
+            </div>
+          </div>
+
+          <div className="divider !my-0" />
+          <div>
+            <label className="form-label">Foot Traffic</label>
+            <select value={filters.footTraffic as string} onChange={(e) => updateFilter('footTraffic', e.target.value)} className="form-input" id="filter-foot-traffic">
+              <option value="">Any</option>
+              <option value="LOW">Low</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="HIGH">High</option>
+            </select>
+          </div>
+        </>
+      )}
       <div className="divider !my-0" />
       <div>
         <label className="form-label">Price Range (RWF/month)</label>

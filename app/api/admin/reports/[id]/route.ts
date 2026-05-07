@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getSessionFromRequest } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
 // PUT /api/admin/reports/[id] — resolve a report
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -11,11 +13,27 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     }
 
     const { id } = await params
-    const { resolved } = await req.json()
+    const body = await req.json()
+    const { status } = body as { status?: string; resolved?: boolean }
+
+    let nextStatus = typeof status === 'string' ? status : undefined
+    if (!nextStatus && typeof resolved === 'boolean') {
+      nextStatus = resolved ? 'REVIEWED' : 'PENDING'
+    }
+
+    const resolvedValue =
+      typeof resolved === 'boolean'
+        ? resolved
+        : nextStatus
+          ? nextStatus !== 'PENDING'
+          : false
 
     const report = await prisma.report.update({
       where: { id },
-      data: { resolved: Boolean(resolved) },
+      data: {
+        status: nextStatus ?? undefined,
+        resolved: resolvedValue,
+      },
     })
 
     return NextResponse.json({ report })

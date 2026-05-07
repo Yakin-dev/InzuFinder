@@ -3,8 +3,8 @@ import { verifyToken } from '@/lib/auth'
 
 const PROTECTED_ROUTES = ['/dashboard', '/admin']
 const AUTH_ROUTES = ['/login', '/register']
-const ADMIN_ROUTES = ['/admin']
-const LANDLORD_ROUTES = ['/dashboard']
+const ADMIN_ROUTES = ['/admin', '/dashboard/admin']
+const LANDLORD_ROUTES = ['/dashboard/landlord']
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
@@ -27,8 +27,8 @@ export async function middleware(req: NextRequest) {
     }
 
     if (isAuthRoute) {
-      if (payload.role === 'ADMIN') return NextResponse.redirect(new URL('/admin', req.url))
-      if (payload.role === 'LANDLORD') return NextResponse.redirect(new URL('/dashboard', req.url))
+      if (payload.role === 'ADMIN') return NextResponse.redirect(new URL('/dashboard/admin', req.url))
+      if (payload.role === 'LANDLORD') return NextResponse.redirect(new URL('/dashboard/landlord', req.url))
       return NextResponse.redirect(new URL('/houses', req.url))
     }
 
@@ -38,6 +38,14 @@ export async function middleware(req: NextRequest) {
 
     if (LANDLORD_ROUTES.some((r) => pathname.startsWith(r)) && payload.role !== 'LANDLORD' && payload.role !== 'ADMIN') {
       return NextResponse.redirect(new URL('/', req.url))
+    }
+
+    if (payload.role === 'TENANT') {
+      const tenantAllowed = ['/dashboard/bookings', '/dashboard/saved', '/dashboard/profile']
+      const isTenantAllowed = tenantAllowed.some((r) => pathname.startsWith(r))
+      if (pathname.startsWith('/dashboard') && !isTenantAllowed) {
+        return NextResponse.redirect(new URL('/houses', req.url))
+      }
     }
   }
 

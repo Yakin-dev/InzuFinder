@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Validation failed', issues: parsed.error.flatten().fieldErrors }, { status: 400 })
     }
 
-    const { houseId, message, moveInDate } = parsed.data
+    const { houseId, message, moveInDate, preferredDate, preferredTime, tenantPhone, purpose, tenantName } = parsed.data
 
     const house = await prisma.house.findUnique({ where: { id: houseId, status: 'APPROVED' } })
     if (!house) return NextResponse.json({ error: 'House not found or not available' }, { status: 404 })
@@ -37,7 +37,12 @@ export async function POST(req: NextRequest) {
         tenantId: session.id,
         houseId,
         message,
-        moveInDate: moveInDate ? new Date(moveInDate) : null,
+        tenantName: (tenantName as string | undefined) || session.name,
+        tenantPhone: tenantPhone || null,
+        preferredDate: preferredDate ? new Date(preferredDate) : moveInDate ? new Date(moveInDate) : null,
+        preferredTime: preferredTime || null,
+        purpose: purpose || 'LIVING',
+        moveInDate: preferredDate ? new Date(preferredDate) : moveInDate ? new Date(moveInDate) : null,
       },
       include: {
         house: { select: { title: true, location: true } },

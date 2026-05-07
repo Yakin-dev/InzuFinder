@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { House, List, X, SignOut, Gear, GridFour, Heart } from '@phosphor-icons/react'
+import { House, List, X, SignOut, Gear, GridFour, Heart, CaretDown } from '@phosphor-icons/react'
 import { useScrollPosition } from '@/hooks/useScrollPosition'
+import { LanguageToggle } from '@/components/LanguageToggle'
 
 interface User {
   id: string
@@ -18,6 +19,7 @@ interface User {
 export default function Header() {
   const [user, setUser] = useState<User | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [accountOpen, setAccountOpen] = useState(false)
   const scrolled = useScrollPosition(80)
   const [savedCount, setSavedCount] = useState(0)
   const pathname = usePathname()
@@ -45,11 +47,17 @@ export default function Header() {
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })
     setUser(null)
+    setAccountOpen(false)
     router.push('/')
     router.refresh()
   }
 
-  const dashboardLink = user?.role === 'ADMIN' ? '/admin' : '/dashboard'
+  const accountRootLink =
+    user?.role === 'ADMIN'
+      ? '/dashboard/admin'
+      : user?.role === 'LANDLORD'
+        ? '/dashboard/landlord'
+        : '/houses'
   const isActive = (path: string) => pathname === path
 
   return (
@@ -112,36 +120,108 @@ export default function Header() {
                 </Link>
               )}
 
+              <LanguageToggle />
+
               {user ? (
-                <div className="flex items-center gap-3">
-                  <Link
-                    href={dashboardLink}
-                    className={`nav-link px-3 py-2 rounded-lg flex items-center gap-1.5 ${
-                      pathname.startsWith('/dashboard') || pathname.startsWith('/admin')
-                        ? 'nav-link-active'
-                        : ''
-                    }`}
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setAccountOpen((v) => !v)}
+                    className="flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-100 transition-colors"
+                    aria-expanded={accountOpen}
                   >
-                    {user.role === 'ADMIN' ? (
-                      <><Gear size={16} weight="duotone" /> Admin</>
-                    ) : (
-                      <><GridFour size={16} weight="duotone" /> Dashboard</>
-                    )}
-                  </Link>
-                  <div className="w-px h-4 bg-gray-200" />
-                  <div className="flex items-center gap-2">
                     <div className="w-8 h-8 bg-gradient-to-br from-[#0d4f2e] to-[#16a34a] rounded-full flex items-center justify-center text-white font-semibold text-sm">
                       {user.name.charAt(0).toUpperCase()}
                     </div>
                     <span className="text-sm font-medium text-gray-700">{user.name.split(' ')[0]}</span>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="btn-ghost text-sm px-3 py-1.5 flex items-center gap-1.5 text-gray-500 hover:text-red-600"
-                  >
-                    <SignOut size={16} />
-                    Logout
+                    <CaretDown size={16} className="text-gray-500" />
                   </button>
+
+                  <AnimatePresence>
+                    {accountOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.15 }}
+                        className="absolute right-0 top-12 w-64 rounded-2xl border border-gray-100 bg-white shadow-2xl overflow-hidden z-[70]"
+                      >
+                        <div className="p-4 border-b border-gray-100">
+                          <div className="text-sm font-bold text-gray-900">{user.name}</div>
+                          <div className="text-xs text-gray-500">{user.role}</div>
+                        </div>
+
+                        <div className="p-2 space-y-1">
+                          {user.role === 'TENANT' ? (
+                            <>
+                              <Link
+                                href="/dashboard/bookings"
+                                onClick={() => setAccountOpen(false)}
+                                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-green-50 hover:text-[#0d4f2e] transition-colors ${
+                                  pathname.startsWith('/dashboard/bookings') ? 'bg-green-50 text-[#0d4f2e]' : ''
+                                }`}
+                              >
+                                <GridFour size={16} weight="duotone" />
+                                My Bookings
+                              </Link>
+                              <Link
+                                href="/dashboard/saved"
+                                onClick={() => setAccountOpen(false)}
+                                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-green-50 hover:text-[#0d4f2e] transition-colors ${
+                                  pathname.startsWith('/dashboard/saved') ? 'bg-green-50 text-[#0d4f2e]' : ''
+                                }`}
+                              >
+                                <Heart size={16} weight="duotone" />
+                                Saved Properties
+                              </Link>
+                              <Link
+                                href="/dashboard/profile"
+                                onClick={() => setAccountOpen(false)}
+                                className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-green-50 hover:text-[#0d4f2e] transition-colors ${
+                                  pathname.startsWith('/dashboard/profile') ? 'bg-green-50 text-[#0d4f2e]' : ''
+                                }`}
+                              >
+                                <Gear size={16} weight="duotone" />
+                                Settings
+                              </Link>
+                            </>
+                          ) : user.role === 'LANDLORD' ? (
+                            <Link
+                              href="/dashboard/landlord"
+                              onClick={() => setAccountOpen(false)}
+                              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-green-50 hover:text-[#0d4f2e] transition-colors ${
+                                pathname.startsWith('/dashboard/landlord') ? 'bg-green-50 text-[#0d4f2e]' : ''
+                              }`}
+                            >
+                              <GridFour size={16} weight="duotone" />
+                              Landlord Dashboard
+                            </Link>
+                          ) : (
+                            <Link
+                              href="/dashboard/admin"
+                              onClick={() => setAccountOpen(false)}
+                              className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium hover:bg-green-50 hover:text-[#0d4f2e] transition-colors ${
+                                pathname.startsWith('/dashboard/admin') ? 'bg-green-50 text-[#0d4f2e]' : ''
+                              }`}
+                            >
+                              <Gear size={16} weight="duotone" />
+                              Admin Dashboard
+                            </Link>
+                          )}
+
+                          <div className="my-1 h-px bg-gray-100" />
+                          <button
+                            type="button"
+                            onClick={handleLogout}
+                            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                          >
+                            <SignOut size={16} />
+                            Logout
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ) : (
                 <>
@@ -227,14 +307,52 @@ export default function Header() {
 
               {user ? (
                 <>
-                  <Link
-                    href={dashboardLink}
-                    className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#0d4f2e] transition-colors"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <GridFour size={20} weight="duotone" />
-                    Dashboard
-                  </Link>
+                  {user.role === 'TENANT' ? (
+                    <>
+                      <Link
+                        href="/dashboard/bookings"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#0d4f2e] transition-colors"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <GridFour size={20} weight="duotone" />
+                        My Bookings
+                      </Link>
+                      <Link
+                        href="/dashboard/saved"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#0d4f2e] transition-colors"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <Heart size={20} weight="duotone" />
+                        Saved Properties
+                      </Link>
+                      <Link
+                        href="/dashboard/profile"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#0d4f2e] transition-colors"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        <Gear size={20} weight="duotone" />
+                        Settings
+                      </Link>
+                    </>
+                  ) : user.role === 'LANDLORD' ? (
+                    <Link
+                      href="/dashboard/landlord"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#0d4f2e] transition-colors"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <GridFour size={20} weight="duotone" />
+                      Landlord Dashboard
+                    </Link>
+                  ) : (
+                    <Link
+                      href="/dashboard/admin"
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-gray-700 hover:bg-green-50 hover:text-[#0d4f2e] transition-colors"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <Gear size={20} weight="duotone" />
+                      Admin Dashboard
+                    </Link>
+                  )}
                   <button
                     onClick={() => { handleLogout(); setMenuOpen(false) }}
                     className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors w-full"

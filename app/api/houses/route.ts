@@ -14,6 +14,10 @@ export async function GET(req: NextRequest) {
     const maxPrice = searchParams.get('maxPrice')
     const bedrooms = searchParams.get('bedrooms')
     const furnished = searchParams.get('furnished')
+    const category = searchParams.get('category')
+    const hasParking = searchParams.get('hasParking')
+    const nearMainRoad = searchParams.get('nearMainRoad')
+    const footTraffic = searchParams.get('footTraffic')
     const search = searchParams.get('search')
     const sort = searchParams.get('sort') // newest, price_asc, price_desc
     const status = searchParams.get('status') // admin filter: PENDING, APPROVED, REJECTED
@@ -46,6 +50,11 @@ export async function GET(req: NextRequest) {
     // Property type filter
     if (type) where.type = type
 
+    // Category filter
+    if (category && ['RESIDENTIAL', 'COMMERCIAL'].includes(category)) {
+      where.category = category
+    }
+
     // Price range filter
     if (minPrice || maxPrice) {
       where.price = {}
@@ -59,6 +68,17 @@ export async function GET(req: NextRequest) {
     // Furnished filter
     if (furnished === 'true') where.furnished = true
     if (furnished === 'false') where.furnished = false
+
+    // Commercial/utility filters
+    if (hasParking === 'true') where.hasParking = true
+    if (hasParking === 'false') where.hasParking = false
+
+    if (nearMainRoad === 'true') where.nearMainRoad = true
+    if (nearMainRoad === 'false') where.nearMainRoad = false
+
+    if (footTraffic && ['LOW', 'MEDIUM', 'HIGH'].includes(footTraffic)) {
+      where.footTraffic = footTraffic
+    }
 
     // Full-text search across title, location, description
     if (search) {

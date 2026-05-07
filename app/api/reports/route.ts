@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma'
 import { getSessionFromRequest } from '@/lib/auth'
 import { ReportSchema } from '@/lib/validations'
 
+export const dynamic = 'force-dynamic'
+
 // POST /api/reports
 export async function POST(req: NextRequest) {
   try {

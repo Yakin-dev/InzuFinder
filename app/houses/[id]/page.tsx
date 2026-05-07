@@ -8,11 +8,13 @@ import Footer from '@/components/layout/Footer'
 import HouseCard from '@/components/houses/HouseCard'
 import BookingForm from './BookingForm'
 import HouseDetailClient from './HouseDetailClient'
+import { HouseDetailQuickActions } from '@/components/HouseDetailQuickActions'
+import { ShareButton } from '@/components/ShareButton'
 import { getServerSession } from '@/lib/auth'
 import type { Metadata } from 'next'
 import {
   Bed, Bathtub, House as HouseIcon, Armchair, MapPin, ShieldCheck, CaretRight,
-  ShareNetwork, Buildings, Ruler
+  Buildings, Ruler
 } from '@phosphor-icons/react/dist/ssr'
 
 // Dynamic SEO metadata
@@ -85,8 +87,18 @@ export default async function HouseDetailPage({ params }: { params: { id: string
     const isLandlord = session?.id === house.landlord.id
     const similar = await getSimilar(house)
 
-  const whatsappLink = house.landlord.phone
-    ? `https://wa.me/${house.landlord.phone.replace(/\+/g, '')}?text=${encodeURIComponent(`Hi, I found your listing "${house.title}" on InzuFinder and I'm interested.`)}`
+  const listingUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? 'https://inzufinder.vercel.app'}/houses/${house.id}`
+  const landlordPhoneDigits = house.landlord.phone ? house.landlord.phone.replace(/[^\d]/g, '') : null
+  const whatsappPhone = landlordPhoneDigits
+    ? landlordPhoneDigits.startsWith('250')
+      ? landlordPhoneDigits
+      : `250${landlordPhoneDigits.replace(/^0+/, '')}`
+    : null
+
+  const whatsappMessage = `Muraho, nabonye iyi nzu "${house.title}" iherereye ${house.location}, ${house.district} kuri InzuFinder. Nifuza kumenya niba ikiboneka no kuyisura. Igiciro ni ${house.price.toLocaleString()} RWF/mwezi. Murakoze! ${listingUrl}`
+
+  const whatsappLink = whatsappPhone
+    ? `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(whatsappMessage)}`
     : null
 
     return (
@@ -208,17 +220,7 @@ export default async function HouseDetailPage({ params }: { params: { id: string
                 {/* Share & Report */}
                 <div className="divider" />
                 <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => {
-                      if (typeof navigator !== 'undefined') {
-                        navigator.clipboard?.writeText(window.location.href)
-                      }
-                    }}
-                    className="btn-ghost text-sm flex items-center gap-1.5"
-                  >
-                    <ShareNetwork size={16} />
-                    Share
-                  </button>
+                  <ShareButton url={listingUrl} />
                 </div>
               </div>
             </div>
@@ -282,6 +284,8 @@ export default async function HouseDetailPage({ params }: { params: { id: string
                 )}
               </div>
 
+              <HouseDetailQuickActions houseId={house.id} houseTitle={house.title} />
+
               {/* Booking Card */}
               <div className="card p-6 sticky top-24">
                 <h3 className="text-lg font-bold text-gray-900 mb-4">Request to Book</h3>
@@ -289,7 +293,7 @@ export default async function HouseDetailPage({ params }: { params: { id: string
                 {isLandlord ? (
                   <div className="bg-blue-50 text-blue-700 p-4 rounded-xl text-sm text-center">
                     This is your own listing. You can view booking requests in your dashboard.
-                    <Link href="/dashboard" className="block mt-2 font-semibold underline">Go to Dashboard</Link>
+                    <Link href="/dashboard/landlord" className="block mt-2 font-semibold underline">Go to Dashboard</Link>
                   </div>
                 ) : session ? (
                   session.role === 'TENANT' ? (

@@ -1,9 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { MapPin, Bed, Bathtub, ShieldCheck, Heart, Star, Ruler } from '@phosphor-icons/react'
+import { MapPin, Bed, Bathtub, Heart, Ruler, SquaresFour } from '@phosphor-icons/react'
+import { useCompareStore } from '@/hooks/useCompare'
+import { useSavedPropertiesStore } from '@/hooks/useSavedProperties'
+import { Badge } from '@/components/ui/Badge'
+import { Avatar } from '@/components/ui/Avatar'
 
 interface HouseCardProps {
   house: {
@@ -28,36 +32,21 @@ interface HouseCardProps {
 
 export default function HouseCard({ house, showStatus = false, index = 0 }: HouseCardProps) {
   const image = house.images[0]?.url || null
-  const [isSaved, setIsSaved] = useState(false)
+  const savedStore = useSavedPropertiesStore()
+  const { ids: compareIds, toggle } = useCompareStore()
+  const isCompared = compareIds.includes(house.id)
 
-  // Check if this house is in favorites
   useEffect(() => {
-    const saved = localStorage.getItem('inzu_favorites')
-    if (saved) {
-      try {
-        const arr = JSON.parse(saved)
-        setIsSaved(arr.includes(house.id))
-      } catch { /* ignore */ }
-    }
-  }, [house.id])
+    void savedStore.load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const isSaved = savedStore.isSaved(house.id)
 
   const toggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    const saved = localStorage.getItem('inzu_favorites')
-    let arr: string[] = []
-    if (saved) {
-      try { arr = JSON.parse(saved) } catch { arr = [] }
-    }
-
-    if (arr.includes(house.id)) {
-      arr = arr.filter(id => id !== house.id)
-      setIsSaved(false)
-    } else {
-      arr.push(house.id)
-      setIsSaved(true)
-    }
-    localStorage.setItem('inzu_favorites', JSON.stringify(arr))
+    void savedStore.toggle(house.id)
   }
 
   const typeLabel = house.type.charAt(0) + house.type.slice(1).toLowerCase()
@@ -89,12 +78,17 @@ export default function HouseCard({ house, showStatus = false, index = 0 }: Hous
 
         {/* Featured ribbon */}
         {house.isFeatured && (
-          <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
-            <Star size={12} weight="fill" />
-            Featured
+          <div className="absolute top-3 right-3">
+            <Badge variant="featured" withIcon className="shadow-sm">
+              Featured
+            </Badge>
           </div>
         )}
-        <div className="absolute top-3 left-3 bg-[#16a34a] text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">✓ Verified</div>
+        <div className="absolute top-3 left-3">
+          <Badge variant="verified" withIcon>
+            Verified
+          </Badge>
+        </div>
 
         {/* Favorite button */}
         <button
@@ -134,14 +128,31 @@ export default function HouseCard({ house, showStatus = false, index = 0 }: Hous
           <div className="flex items-center gap-1"><Ruler size={14} weight="regular" /><span>{house.size ? `${house.size}m²` : 'N/A'}</span></div>
         </div>
         <div className="divider !my-3" />
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 bg-gradient-to-br from-[#0d4f2e] to-[#16a34a] rounded-full flex items-center justify-center text-xs font-bold text-white">
-              {house.landlord.name.charAt(0).toUpperCase()}
-            </div>
+            <Avatar name={house.landlord.name} size={20} />
             <span className="text-xs text-gray-500 truncate max-w-[100px]">{house.landlord.name}</span>
           </div>
-          <span className="btn-secondary !px-3 !py-1.5 !text-xs">View Details</span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                toggle(house.id)
+              }}
+              className={`inline-flex items-center gap-1 rounded-xl px-3 py-1.5 text-xs font-semibold border transition-colors ${
+                isCompared
+                  ? 'border-[#16a34a] bg-[#16a34a]/10 text-[#0d4f2e]'
+                  : 'border-gray-200 bg-white text-gray-600 hover:border-green-200 hover:text-[#0d4f2e]'
+              }`}
+              aria-pressed={isCompared}
+            >
+              <SquaresFour size={14} weight="duotone" />
+              {isCompared ? 'Selected' : 'Compare'}
+            </button>
+            <span className="btn-secondary !px-3 !py-1.5 !text-xs">View Details</span>
+          </div>
         </div>
       </div>
     </Link>

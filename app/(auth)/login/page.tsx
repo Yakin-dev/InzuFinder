@@ -55,8 +55,8 @@ export default function LoginPage() {
 
       toast.success(`Welcome back, ${data.user.name}!`)
 
-      if (data.user.role === 'ADMIN') router.push('/admin')
-      else if (data.user.role === 'LANDLORD') router.push('/dashboard')
+      if (data.user.role === 'ADMIN') router.push('/dashboard/admin')
+      else if (data.user.role === 'LANDLORD') router.push('/dashboard/landlord')
       else router.push('/houses')
       router.refresh()
     } catch {
@@ -81,7 +81,7 @@ export default function LoginPage() {
       </div>
       <div className="w-full lg:w-[60%] flex items-center justify-center p-6 sm:p-10 bg-white">
         <div className="w-full max-w-md">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Welcome back 👋</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Welcome back</h1>
           <p className="text-gray-600 mb-8">Sign in to continue finding your home</p>
           <form onSubmit={handleSubmit} className="space-y-5">
             {errors.general && (

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getSessionFromRequest } from '@/lib/auth'
 
+export const dynamic = 'force-dynamic'
+
 // PUT /api/bookings/[id] — landlord accepts or declines
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {

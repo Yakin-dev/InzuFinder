@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import './globals.css'
 import { PageTransition } from '@/components/PageTransition'
+import DemoBanner from '@/components/DemoBanner'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -25,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.variable}>
       <body className="antialiased bg-warm-white text-gray-900">
+        <DemoBanner />
         <PageTransition>{children}</PageTransition>
         <Toaster
           position="top-right"

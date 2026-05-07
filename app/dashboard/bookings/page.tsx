@@ -12,14 +12,20 @@ interface Booking {
   moveInDate: string | null
   createdAt: string
   house: { id: string; title: string; location: string }
-  tenant: { name: string; email: string; phone: string | null }
+  tenant?: { name: string; email: string; phone: string | null }
 }
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
+  const [role, setRole] = useState<string | null>(null)
 
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then((r) => r.json())
+      .then((data) => setRole(data?.user?.role || null))
+      .catch(() => setRole(null))
+
     fetchBookings()
   }, [])
 
@@ -56,8 +62,12 @@ export default function BookingsPage() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Booking Requests</h1>
-        <p className="text-gray-500 mt-1">Manage incoming requests from tenants</p>
+        <h1 className="text-2xl font-bold text-gray-900">
+          {role === 'TENANT' ? 'My Booking Requests' : 'Booking Requests'}
+        </h1>
+        <p className="text-gray-500 mt-1">
+          {role === 'TENANT' ? 'Track your requests and status' : 'Manage incoming requests from tenants'}
+        </p>
       </div>
 
       {loading ? (
@@ -88,15 +98,23 @@ export default function BookingsPage() {
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4 p-3 bg-gray-50 rounded-xl">
-                <div className="flex items-center gap-2 text-sm">
-                  <User size={16} weight="duotone" className="text-gray-400" />
-                  <span className="text-gray-700 font-medium">{booking.tenant.name}</span>
-                </div>
-                <div className="flex items-center gap-2 text-sm">
-                  <Phone size={16} weight="duotone" className="text-gray-400" />
-                  <span className="text-gray-600">{booking.tenant.phone || booking.phone || 'Not provided'}</span>
-                </div>
+              <div
+                className={`grid gap-3 mb-4 p-3 bg-gray-50 rounded-xl ${
+                  role === 'TENANT' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-3'
+                }`}
+              >
+                {role !== 'TENANT' && (
+                  <>
+                    <div className="flex items-center gap-2 text-sm">
+                      <User size={16} weight="duotone" className="text-gray-400" />
+                      <span className="text-gray-700 font-medium">{booking.tenant?.name || '—'}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <Phone size={16} weight="duotone" className="text-gray-400" />
+                      <span className="text-gray-600">{booking.tenant?.phone || booking.phone || 'Not provided'}</span>
+                    </div>
+                  </>
+                )}
                 <div className="flex items-center gap-2 text-sm">
                   <CalendarBlank size={16} weight="duotone" className="text-gray-400" />
                   <span className="text-gray-600">
@@ -112,7 +130,7 @@ export default function BookingsPage() {
                 </div>
               )}
 
-              {booking.status === 'PENDING' && (
+              {role !== 'TENANT' && booking.status === 'PENDING' && (
                 <div className="flex gap-3 pt-3 border-t border-gray-100">
                   <button
                     onClick={() => handleAction(booking.id, 'ACCEPTED')}

@@ -28,7 +28,13 @@ export const HouseSchema = z.object({
 export const BookingSchema = z.object({
   houseId: z.string().cuid('Invalid house ID'),
   message: z.string().optional(),
+  // Backward-compatible: the UI previously used moveInDate.
   moveInDate: z.string().optional(),
+  preferredDate: z.string().optional(),
+  preferredTime: z.string().optional(),
+  tenantPhone: z.string().optional(),
+  tenantName: z.string().optional(),
+  purpose: z.string().optional(),
 })
 
 export const ReportSchema = z.object({

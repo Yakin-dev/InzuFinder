@@ -10,6 +10,7 @@ export default function RegisterContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const defaultRole = searchParams.get('role') === 'LANDLORD' ? 'LANDLORD' : 'TENANT'
+  const redirectTo = searchParams.get('redirect')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [agreeTerms, setAgreeTerms] = useState(false)
@@ -41,7 +42,15 @@ export default function RegisterContent() {
         return
       }
       toast.success('Account created successfully!')
-      router.push(data.user.role === 'LANDLORD' ? '/dashboard' : '/houses')
+      if (redirectTo) {
+        router.push(redirectTo)
+      } else if (data.user.role === 'ADMIN') {
+        router.push('/dashboard/admin')
+      } else if (data.user.role === 'LANDLORD') {
+        router.push('/dashboard/landlord')
+      } else {
+        router.push('/houses')
+      }
       router.refresh()
     } catch {
       setErrors({ general: 'Something went wrong. Please try again.' })

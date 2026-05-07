@@ -4,6 +4,16 @@
 
 @layer base {
   :root {
+    --brand-primary: #0d4f2e;
+    --brand-accent: #16a34a;
+    --brand-light: #f0fdf4;
+    --commercial: #2563eb;
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-card-hover: 0 20px 40px rgba(13,79,46,0.12);
+    --radius-card: 16px;
+    --radius-btn: 10px;
     --color-forest: #0d4f2e;
     --color-forest-dark: #0a3d23;
     --color-forest-light: #166534;
@@ -25,7 +35,12 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    transition-property: color, background-color, border-color, box-shadow, transform, opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
   }
+
+  .no-transition * { transition: none !important; }
 
   html {
     scroll-behavior: smooth;

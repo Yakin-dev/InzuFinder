@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { MagnifyingGlass } from '@phosphor-icons/react'
+import SmartSearch from '@/components/SmartSearch'
 
 export default function HomeHero() {
   const chips = [
@@ -29,15 +29,7 @@ export default function HomeHero() {
           Verified listings only. No fake posts. Every home reviewed by our team.
         </motion.p>
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }} className="glass-search rounded-2xl p-2 sm:p-3 max-w-2xl">
-          <form action="/houses" method="GET" className="flex flex-col sm:flex-row gap-2">
-            <select name="district" className="flex-1 px-4 py-3 rounded-xl text-white text-sm bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#16a34a]">
-              <option value="" className="text-gray-900">All Districts</option><option value="Gasabo" className="text-gray-900">Gasabo</option><option value="Kicukiro" className="text-gray-900">Kicukiro</option><option value="Nyarugenge" className="text-gray-900">Nyarugenge</option>
-            </select>
-            <select name="type" className="flex-1 px-4 py-3 rounded-xl text-white text-sm bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#16a34a]">
-              <option value="" className="text-gray-900">All Types</option><option value="HOUSE" className="text-gray-900">House</option><option value="APARTMENT" className="text-gray-900">Apartment</option><option value="STUDIO" className="text-gray-900">Studio</option>
-            </select>
-            <button type="submit" className="btn-primary px-8 py-3 flex-shrink-0 flex items-center gap-2"><MagnifyingGlass size={18} weight="regular" />Search</button>
-          </form>
+          <SmartSearch />
         </motion.div>
         <div className="mt-5 overflow-x-auto"><div className="flex gap-2 flex-nowrap">
           {chips.map((tag, i) => (

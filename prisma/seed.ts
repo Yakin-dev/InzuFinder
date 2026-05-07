@@ -1,297 +1,616 @@
-import { prisma } from '../lib/prisma'
 import bcrypt from 'bcryptjs'
+import { prisma } from '../lib/prisma'
+
+type SeedHouse = {
+  title: string
+  description: string
+  price: number
+  location: string
+  district: 'Gasabo' | 'Kicukiro' | 'Nyarugenge'
+  type:
+    | 'HOUSE'
+    | 'APARTMENT'
+    | 'STUDIO'
+    | 'ROOM'
+    | 'VILLA'
+    | 'SHOP'
+    | 'OFFICE'
+    | 'WAREHOUSE'
+    | 'HALL'
+    | 'RESTAURANT'
+  category: 'RESIDENTIAL' | 'COMMERCIAL'
+  availability:
+    | 'AVAILABLE'
+    | 'VISIT_BOOKED'
+    | 'UNDER_NEGOTIATION'
+    | 'RENTED'
+    | 'UNAVAILABLE'
+  furnished: boolean
+  bedrooms: number
+  bathrooms: number
+  size?: number
+  floor?: number
+  lat: number
+  lng: number
+  isFeatured?: boolean
+  footTraffic?: 'LOW' | 'MEDIUM' | 'HIGH'
+  nearMainRoad?: boolean
+  hasParking?: boolean
+  whatsappNumber?: string
+  images: string[]
+}
 
 async function main() {
-  console.log('🌱 Starting seed...')
+  console.log('🌱 Seeding InzuFinder…')
 
-  // Create a landlord user for seed listings
-  const hashedPassword = await bcrypt.hash('landlord123', 12)
+  // Clear data (order matters due to relations)
+  await prisma.savedProperty.deleteMany().catch(() => {})
+  await prisma.bookingRequest.deleteMany().catch(() => {})
+  await prisma.booking.deleteMany().catch(() => {})
+  await prisma.report.deleteMany().catch(() => {})
+  await prisma.houseImage.deleteMany().catch(() => {})
+  await prisma.house.deleteMany().catch(() => {})
 
-  const landlord = await prisma.user.upsert({
-    where: { email: 'landlord@inzufinder.rw' },
-    update: {},
-    create: {
-      name: 'Jean-Pierre Habimana',
-      email: 'landlord@inzufinder.rw',
-      password: hashedPassword,
-      role: 'LANDLORD',
-      phone: '+250788123456',
-      isVerified: true,
-    },
-  })
+  // Keep existing users if they’re not our demo emails; delete demo users to reseed cleanly
+  const demoEmails = [
+    'admin@inzufinder.rw',
+    'tenant@inzufinder.rw',
+    'tenant2@inzufinder.rw',
+    'landlord@inzufinder.rw',
+    'landlord2@inzufinder.rw',
+  ]
+  await prisma.user.deleteMany({ where: { email: { in: demoEmails } } }).catch(() => {})
 
-  // Create a second landlord
-  const landlord2 = await prisma.user.upsert({
-    where: { email: 'marie@inzufinder.rw' },
-    update: {},
-    create: {
-      name: 'Marie Uwimana',
-      email: 'marie@inzufinder.rw',
-      password: hashedPassword,
-      role: 'LANDLORD',
-      phone: '+250788654321',
-      isVerified: true,
-    },
-  })
-
-  // Create an admin user
-  const adminPassword = await bcrypt.hash('admin123', 12)
-  await prisma.user.upsert({
-    where: { email: 'admin@inzufinder.rw' },
-    update: {},
-    create: {
-      name: 'Admin InzuFinder',
-      email: 'admin@inzufinder.rw',
-      password: adminPassword,
-      role: 'ADMIN',
-      phone: '+250788000000',
-      isVerified: true,
-    },
-  })
-
-  // Create a tenant user
+  const landlordPassword = await bcrypt.hash('landlord123', 12)
   const tenantPassword = await bcrypt.hash('tenant123', 12)
-  await prisma.user.upsert({
-    where: { email: 'tenant@inzufinder.rw' },
-    update: {},
-    create: {
-      name: 'Patrick Nkurunziza',
-      email: 'tenant@inzufinder.rw',
-      password: tenantPassword,
-      role: 'TENANT',
-      phone: '+250788111222',
-      isVerified: false,
-    },
-  })
+  const adminPassword = await bcrypt.hash('admin123', 12)
 
-  // 10 realistic Kigali house listings
-  const listings = [
+  const [landlord1, landlord2, admin, tenant1, tenant2] = await Promise.all([
+    prisma.user.create({
+      data: {
+        name: 'Jean-Paul Mugenzi',
+        email: 'landlord@inzufinder.rw',
+        password: landlordPassword,
+        role: 'LANDLORD',
+        phone: '+250788123456',
+        isVerified: true,
+        isActive: true,
+      },
+    }),
+    prisma.user.create({
+      data: {
+        name: 'Claudine Uwimana',
+        email: 'landlord2@inzufinder.rw',
+        password: landlordPassword,
+        role: 'LANDLORD',
+        phone: '+250788654321',
+        isVerified: true,
+        isActive: true,
+      },
+    }),
+    prisma.user.create({
+      data: {
+        name: 'InzuFinder Admin',
+        email: 'admin@inzufinder.rw',
+        password: adminPassword,
+        role: 'ADMIN',
+        phone: '+250788000000',
+        isVerified: true,
+        isActive: true,
+      },
+    }),
+    prisma.user.create({
+      data: {
+        name: 'Amina N.',
+        email: 'tenant@inzufinder.rw',
+        password: tenantPassword,
+        role: 'TENANT',
+        phone: '+250788111222',
+        isVerified: false,
+        isActive: true,
+      },
+    }),
+    prisma.user.create({
+      data: {
+        name: 'Patrick K.',
+        email: 'tenant2@inzufinder.rw',
+        password: tenantPassword,
+        role: 'TENANT',
+        phone: '+250788333444',
+        isVerified: false,
+        isActive: true,
+      },
+    }),
+  ])
+
+  void admin
+  void tenant1
+  void tenant2
+
+  const houses: SeedHouse[] = [
+    // Residential (14)
     {
       title: 'Modern 3-Bedroom Apartment in Kimihurura',
-      description: 'Spacious and modern apartment located in the heart of Kimihurura, one of Kigali\'s most sought-after neighborhoods. The property features an open-plan living area, a fully equipped kitchen with granite countertops, and three well-sized bedrooms, each with en-suite bathrooms. Floor-to-ceiling windows offer stunning views of the surrounding hills. The building has 24-hour security, a gym, and covered parking. Walking distance to restaurants, supermarkets, and the Convention Centre.',
+      description:
+        'Modern, sunlit apartment near Kigali Convention Centre. Open-plan living, secure parking, and quick access to Kimihurura’s cafés and offices.',
       price: 650000,
       location: 'Kimihurura',
       district: 'Gasabo',
-      type: 'APARTMENT' as const,
+      type: 'APARTMENT',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: true,
       bedrooms: 3,
       bathrooms: 3,
       size: 120,
       floor: 4,
-      furnished: true,
+      lat: -1.9365,
+      lng: 30.0847,
       isFeatured: true,
-      landlordId: landlord.id,
+      whatsappNumber: landlord1.phone ?? undefined,
       images: [
-        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
-        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800',
+        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200',
+        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200',
       ],
     },
     {
-      title: 'Cozy Studio in Remera Near Amahoro Stadium',
-      description: 'Perfect for young professionals or students, this cozy studio apartment is located in the vibrant Remera neighborhood, just minutes from Amahoro Stadium and major bus routes. The unit comes fully furnished with a comfortable bed, work desk, and kitchenette. Utilities are included in the rent. Secure compound with gated access and on-site caretaker. Ideal for those who want to be in the center of Kigali\'s urban life.',
+      title: 'Cozy Studio Apartment in Kacyiru',
+      description:
+        'Comfortable furnished studio in Kacyiru with easy access to offices, supermarkets, and reliable transport. Ideal for a solo tenant.',
       price: 120000,
-      location: 'Remera',
-      district: 'Gasabo',
-      type: 'STUDIO' as const,
-      bedrooms: 1,
-      bathrooms: 1,
-      size: 35,
-      floor: 2,
-      furnished: true,
-      isFeatured: false,
-      landlordId: landlord.id,
-      images: [
-        'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800',
-      ],
-    },
-    {
-      title: 'Elegant Villa with Garden in Nyarutarama',
-      description: 'A luxurious 5-bedroom villa in the prestigious Nyarutarama neighborhood. This property boasts a large living room, formal dining area, modern kitchen, and a master suite with walk-in closet. The beautifully landscaped garden includes a gazebo and outdoor entertaining area. Two-car garage, backup generator, water tank, and full-time security. Perfect for diplomats and expatriate families looking for upscale living in Kigali.',
-      price: 800000,
-      location: 'Nyarutarama',
-      district: 'Gasabo',
-      type: 'VILLA' as const,
-      bedrooms: 5,
-      bathrooms: 4,
-      size: 300,
-      floor: 0,
-      furnished: false,
-      isFeatured: true,
-      landlordId: landlord2.id,
-      images: [
-        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800',
-        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800',
-      ],
-    },
-    {
-      title: 'Affordable 2-Bedroom House in Nyamirambo',
-      description: 'Well-maintained 2-bedroom house in the culturally rich Nyamirambo neighborhood. Features include a bright living room, separate dining area, and a small courtyard. The house is close to local markets, mosques, churches, and the famous Nyamirambo Women\'s Centre. Public transport is easily accessible. An excellent choice for families looking for an affordable home with authentic Kigali character.',
-      price: 80000,
-      location: 'Nyamirambo',
-      district: 'Nyarugenge',
-      type: 'HOUSE' as const,
-      bedrooms: 2,
-      bathrooms: 1,
-      size: 75,
-      floor: 0,
-      furnished: false,
-      isFeatured: false,
-      landlordId: landlord.id,
-      images: [
-        'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800',
-      ],
-    },
-    {
-      title: 'Brand New Apartment in Kacyiru Business District',
-      description: 'Just completed, this modern 2-bedroom apartment in the Kacyiru business district offers the best of urban living. Open-plan kitchen and living area with high-end finishes. Both bedrooms have built-in wardrobes. The building features an elevator, underground parking, and rooftop terrace with panoramic views. Steps away from government offices, banks, and international organizations.',
-      price: 450000,
       location: 'Kacyiru',
       district: 'Gasabo',
-      type: 'APARTMENT' as const,
-      bedrooms: 2,
-      bathrooms: 2,
-      size: 85,
-      floor: 6,
-      furnished: false,
-      isFeatured: true,
-      landlordId: landlord2.id,
-      images: [
-        'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800',
-        'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800',
-      ],
-    },
-    {
-      title: 'Furnished Studio in Kibagabaga Near Hospital',
-      description: 'Conveniently located furnished studio near Kibagabaga Hospital and commercial area. The unit includes a comfortable queen bed, wardrobe, study area, and a compact but well-equipped kitchenette. Shared laundry facilities available in the compound. Quiet and safe neighborhood with easy access to public transportation. Ideal for medical professionals or anyone working in the Kibagabaga area.',
-      price: 150000,
-      location: 'Kibagabaga',
-      district: 'Gasabo',
-      type: 'STUDIO' as const,
+      type: 'STUDIO',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: true,
       bedrooms: 1,
       bathrooms: 1,
-      size: 30,
-      floor: 1,
-      furnished: true,
-      isFeatured: false,
-      landlordId: landlord.id,
-      images: [
-        'https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=800',
-      ],
+      size: 32,
+      floor: 2,
+      lat: -1.9344,
+      lng: 30.0619,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200'],
     },
     {
-      title: 'Spacious 4-Bedroom Family Home in Kicukiro',
-      description: 'A wonderful family home in the heart of Kicukiro, offering four generous bedrooms, a large living room, separate dining room, and a fully tiled kitchen. The compound includes a garden area, servants\' quarters, and space for two vehicles. Located near schools, healthcare facilities, and shopping centers. The neighborhood is quiet, family-friendly, and well-connected to central Kigali.',
-      price: 350000,
-      location: 'Kicukiro Centre',
-      district: 'Kicukiro',
-      type: 'HOUSE' as const,
-      bedrooms: 4,
-      bathrooms: 3,
-      size: 180,
-      floor: 0,
-      furnished: false,
-      isFeatured: false,
-      landlordId: landlord2.id,
-      images: [
-        'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800',
-        'https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800',
-      ],
-    },
-    {
-      title: 'Modern 1-Bedroom in Gacuriro Hilltop',
-      description: 'Enjoy breathtaking views from this elevated 1-bedroom apartment in the Gacuriro hills. Modern interior with quality finishes, European-style bathroom, and a balcony perfect for morning coffee while watching the sunrise over Kigali. The complex offers communal green spaces, a playground for children, and 24/7 security. Close to Vision City Mall, making shopping and entertainment easily accessible.',
-      price: 200000,
-      location: 'Gacuriro',
+      title: 'Spacious Family House in Remera',
+      description:
+        'A practical family home in Remera with generous living space and secure compound parking. Close to key routes and services.',
+      price: 450000,
+      location: 'Remera',
       district: 'Gasabo',
-      type: 'APARTMENT' as const,
-      bedrooms: 1,
-      bathrooms: 1,
-      size: 50,
-      floor: 3,
-      furnished: true,
-      isFeatured: false,
-      landlordId: landlord.id,
-      images: [
-        'https://images.unsplash.com/photo-1554995207-c18c203602cb?w=800',
-      ],
-    },
-    {
-      title: 'Executive 3-Bed Townhouse in Gikondo',
-      description: 'This executive townhouse in the developing Gikondo area offers excellent value. Three bedrooms upstairs, a guest bathroom downstairs, open-plan kitchen and living area, and a private courtyard with car parking. The property is in a gated community with shared garden and playground. Gikondo\'s rapid development means new shops and services are opening nearby. An excellent investment for comfortable, mid-range living.',
-      price: 280000,
-      location: 'Gikondo',
-      district: 'Kicukiro',
-      type: 'HOUSE' as const,
+      type: 'HOUSE',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
       bedrooms: 3,
       bathrooms: 2,
-      size: 140,
+      size: 180,
       floor: 0,
-      furnished: false,
-      isFeatured: false,
-      landlordId: landlord2.id,
-      images: [
-        'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800',
-      ],
+      lat: -1.9551,
+      lng: 30.1127,
+      isFeatured: true,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200'],
     },
     {
-      title: 'Luxury Penthouse in Kigali City Tower',
-      description: 'The crown jewel of city living — a stunning penthouse apartment atop one of Kigali\'s premier residential towers. Features include floor-to-ceiling windows, a wrap-around terrace, designer kitchen with European appliances, home office, and a master suite with a spa-like bathroom. Premium building amenities include concierge, fitness center, swimming pool, and helipad access. Unmatched 360-degree views of Kigali and the surrounding hills.',
-      price: 750000,
-      location: 'Nyarugenge CBD',
+      title: 'Luxury Penthouse in Nyarugenge CBD',
+      description:
+        'Premium city penthouse with sweeping views, refined finishes, and quick access to CBD offices, restaurants, and nightlife.',
+      price: 900000,
+      location: 'CBD',
       district: 'Nyarugenge',
-      type: 'APARTMENT' as const,
+      type: 'APARTMENT',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: true,
       bedrooms: 3,
       bathrooms: 3,
       size: 200,
       floor: 15,
-      furnished: true,
+      lat: -1.9536,
+      lng: 30.0606,
       isFeatured: true,
-      landlordId: landlord.id,
+      whatsappNumber: landlord2.phone ?? undefined,
       images: [
-        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800',
-        'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800',
+        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200',
+        'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200',
       ],
+    },
+    {
+      title: 'Affordable 2-Bed Apartment in Gacuriro',
+      description:
+        'Simple and clean 2-bedroom apartment in Gacuriro with calm surroundings and easy access to main roads and shopping.',
+      price: 180000,
+      location: 'Gacuriro',
+      district: 'Gasabo',
+      type: 'APARTMENT',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 2,
+      bathrooms: 1,
+      size: 70,
+      floor: 3,
+      lat: -1.9162,
+      lng: 30.1261,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200'],
+    },
+    {
+      title: 'Executive Villa in Nyarutarama',
+      description:
+        'Executive villa in Nyarutarama with a private garden, ample parking, and strong security. Built for long-term comfort.',
+      price: 1200000,
+      location: 'Nyarutarama',
+      district: 'Gasabo',
+      type: 'VILLA',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: true,
+      bedrooms: 5,
+      bathrooms: 4,
+      size: 320,
+      floor: 0,
+      lat: -1.9281,
+      lng: 30.0934,
+      isFeatured: true,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: [
+        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200',
+        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200',
+      ],
+    },
+    {
+      title: 'Single Room in Nyamirambo',
+      description:
+        'Affordable room in Nyamirambo near markets and public transport. Great for students and early-career workers.',
+      price: 60000,
+      location: 'Nyamirambo',
+      district: 'Nyarugenge',
+      type: 'ROOM',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 1,
+      bathrooms: 1,
+      size: 16,
+      floor: 0,
+      lat: -1.9799,
+      lng: 30.0378,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200'],
+    },
+    {
+      title: '3-Bedroom Townhouse in Gikondo',
+      description:
+        'Townhouse in Gikondo with reliable access routes and a quiet compound. Balanced choice for families.',
+      price: 280000,
+      location: 'Gikondo',
+      district: 'Kicukiro',
+      type: 'HOUSE',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 3,
+      bathrooms: 2,
+      size: 140,
+      floor: 0,
+      lat: -1.9741,
+      lng: 30.0826,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200'],
+    },
+    {
+      title: 'Modern Apartment in Kibagabaga',
+      description:
+        'Modern furnished apartment near Kibagabaga with quick access to services and a calm residential feel.',
+      price: 220000,
+      location: 'Kibagabaga',
+      district: 'Gasabo',
+      type: 'APARTMENT',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: true,
+      bedrooms: 2,
+      bathrooms: 2,
+      size: 78,
+      floor: 2,
+      lat: -1.9162,
+      lng: 30.1089,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200'],
+    },
+    {
+      title: 'Budget Room near University of Rwanda',
+      description:
+        'Budget-friendly room close to central routes and campus access. Clean, safe compound and easy commute.',
+      price: 45000,
+      location: 'Muhima',
+      district: 'Nyarugenge',
+      type: 'ROOM',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 1,
+      bathrooms: 1,
+      size: 14,
+      floor: 0,
+      lat: -1.965,
+      lng: 30.065,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1551516594-56cb78394645?w=1200'],
+    },
+    {
+      title: '2-Bedroom Apartment in Kagarama',
+      description:
+        'Bright 2-bedroom apartment in Kagarama with comfortable layout and a secure compound. Ideal for small families.',
+      price: 200000,
+      location: 'Kagarama',
+      district: 'Kicukiro',
+      type: 'APARTMENT',
+      category: 'RESIDENTIAL',
+      availability: 'VISIT_BOOKED',
+      furnished: true,
+      bedrooms: 2,
+      bathrooms: 1,
+      size: 68,
+      floor: 1,
+      lat: -1.9879,
+      lng: 30.0977,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=1200'],
+    },
+    {
+      title: 'Student Studio near INES-Ruhengeri',
+      description:
+        'Compact studio with efficient layout, good ventilation, and quick access to transport routes. Student-friendly budget.',
+      price: 80000,
+      location: 'Gikondo',
+      district: 'Kicukiro',
+      type: 'STUDIO',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: true,
+      bedrooms: 1,
+      bathrooms: 1,
+      size: 28,
+      floor: 1,
+      lat: -1.97,
+      lng: 30.08,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=1200'],
+    },
+    {
+      title: 'Elegant 4-Bed House in Kimironko',
+      description:
+        'Elegant furnished home near Kimironko with strong access to markets and main routes. Great for a larger household.',
+      price: 550000,
+      location: 'Kimironko',
+      district: 'Gasabo',
+      type: 'HOUSE',
+      category: 'RESIDENTIAL',
+      availability: 'UNDER_NEGOTIATION',
+      furnished: true,
+      bedrooms: 4,
+      bathrooms: 3,
+      size: 220,
+      floor: 0,
+      lat: -1.94,
+      lng: 30.12,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200'],
+    },
+    {
+      title: 'Furnished Room near Kigali Convention Centre',
+      description:
+        'Furnished room near central Kigali with quick commute to CBD and Convention Centre. Quiet compound and dependable utilities.',
+      price: 90000,
+      location: 'CBD',
+      district: 'Nyarugenge',
+      type: 'ROOM',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: true,
+      bedrooms: 1,
+      bathrooms: 1,
+      size: 18,
+      floor: 0,
+      lat: -1.948,
+      lng: 30.059,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1200'],
+    },
+
+    // Commercial (6)
+    {
+      title: 'Prime Shop Space in Kimironko Market',
+      description:
+        'High-foot-traffic shop space in Kimironko Market zone. Best for retail, mobile money, fashion, or mini-mart.',
+      price: 180000,
+      location: 'Kimironko Market',
+      district: 'Gasabo',
+      type: 'SHOP',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 1,
+      size: 40,
+      floor: 0,
+      lat: -1.94,
+      lng: 30.12,
+      isFeatured: true,
+      footTraffic: 'HIGH',
+      nearMainRoad: true,
+      hasParking: false,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=1200'],
+    },
+    {
+      title: 'Office Space in Kigali Business District',
+      description:
+        'Professional office space in the Business District with great access, parking, and strong visibility for client visits.',
+      price: 450000,
+      location: 'Business District',
+      district: 'Nyarugenge',
+      type: 'OFFICE',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 1,
+      size: 85,
+      floor: 3,
+      lat: -1.9536,
+      lng: 30.0606,
+      footTraffic: 'HIGH',
+      hasParking: true,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200'],
+    },
+    {
+      title: 'Mini-Supermarket Space in Remera',
+      description:
+        'Retail space suited for mini-supermarket operations. Good frontage, parking, and quick supply access.',
+      price: 250000,
+      location: 'Remera',
+      district: 'Gasabo',
+      type: 'SHOP',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 1,
+      size: 65,
+      floor: 0,
+      lat: -1.9551,
+      lng: 30.1127,
+      footTraffic: 'MEDIUM',
+      nearMainRoad: true,
+      hasParking: true,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1515165562835-c4c4b6b8b6b9?w=1200'],
+    },
+    {
+      title: 'Restaurant Space in Nyamirambo',
+      description:
+        'Restaurant-ready commercial space in Nyamirambo with high foot traffic and strong community demand. Great evening flow.',
+      price: 150000,
+      location: 'Nyamirambo',
+      district: 'Nyarugenge',
+      type: 'RESTAURANT',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 2,
+      size: 90,
+      floor: 0,
+      lat: -1.9799,
+      lng: 30.0378,
+      footTraffic: 'HIGH',
+      hasParking: false,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1200'],
+    },
+    {
+      title: 'Event Hall in Gikondo',
+      description:
+        'Flexible event hall for ceremonies, trainings, and community events. Good access and parking. Secure premises.',
+      price: 500000,
+      location: 'Gikondo',
+      district: 'Kicukiro',
+      type: 'HALL',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 2,
+      size: 260,
+      floor: 0,
+      lat: -1.9741,
+      lng: 30.0826,
+      footTraffic: 'MEDIUM',
+      hasParking: true,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1200'],
+    },
+    {
+      title: 'Warehouse in Masoro Industrial Zone',
+      description:
+        'Warehouse suited for logistics and storage with main-road access and parking for operations. Ideal for SME supply chains.',
+      price: 350000,
+      location: 'Masoro Industrial Zone',
+      district: 'Gasabo',
+      type: 'WAREHOUSE',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 1,
+      size: 400,
+      floor: 0,
+      lat: -1.89,
+      lng: 30.05,
+      footTraffic: 'LOW',
+      nearMainRoad: true,
+      hasParking: true,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200'],
     },
   ]
 
-  // Create each listing with images
-  for (const listing of listings) {
-    const { images, ...houseData } = listing
+  const expiresAt = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+  const landlords = [landlord1, landlord2]
 
-    const existingHouse = await prisma.house.findFirst({
-      where: { title: listing.title },
-    })
+  for (let i = 0; i < houses.length; i++) {
+    const h = houses[i]
+    const landlord = landlords[i % landlords.length]
 
-    if (existingHouse) {
-      console.log(`  ⏭️  Skipping existing: ${listing.title}`)
-      continue
-    }
-
-    const house = await prisma.house.create({
+    await prisma.house.create({
       data: {
-        ...houseData,
+        title: h.title,
+        description: h.description,
+        price: h.price,
+        location: h.location,
+        district: h.district,
+        type: h.type,
+        bedrooms: h.bedrooms,
+        bathrooms: h.bathrooms,
+        furnished: h.furnished,
         status: 'APPROVED',
-        expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days from now
-        images: {
-          create: images.map((url) => ({ url })),
-        },
+        landlordId: landlord.id,
+        expiresAt,
+        isFeatured: Boolean(h.isFeatured),
+
+        category: h.category,
+        availability: h.availability,
+        size: h.size ? Math.round(h.size) : null,
+        floor: typeof h.floor === 'number' ? h.floor : null,
+        lat: h.lat,
+        lng: h.lng,
+        views: 0,
+        viewCount: 0,
+        whatsappNumber: h.whatsappNumber,
+        hasParking: Boolean(h.hasParking),
+        nearMainRoad: Boolean(h.nearMainRoad),
+        footTraffic: h.footTraffic,
+
+        images: { create: h.images.map((url) => ({ url })) },
       },
     })
-
-    console.log(`  ✅ Created: ${house.title}`)
   }
 
-  console.log('\n🎉 Seed complete!')
-  console.log('\n📋 Test accounts:')
-  console.log('   Landlord: landlord@inzufinder.rw / landlord123')
-  console.log('   Landlord: marie@inzufinder.rw / landlord123')
-  console.log('   Admin:    admin@inzufinder.rw / admin123')
-  console.log('   Tenant:   tenant@inzufinder.rw / tenant123')
+  console.log('✅ Seed complete')
+  console.log('Demo logins:')
+  console.log(' - tenant@inzufinder.rw / tenant123')
+  console.log(' - admin@inzufinder.rw / admin123')
 }
 
 main()
-  .then(async () => {
-    await prisma.$disconnect()
-  })
+  .then(async () => prisma.$disconnect())
   .catch(async (e) => {
     console.error(e)
     await prisma.$disconnect()
