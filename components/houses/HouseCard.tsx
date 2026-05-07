@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { MapPin, Bed, Bathtub, ShieldCheck, Heart, Star } from '@phosphor-icons/react'
+import { MapPin, Bed, Bathtub, ShieldCheck, Heart, Star, Ruler } from '@phosphor-icons/react'
 
 interface HouseCardProps {
   house: {
@@ -15,6 +15,7 @@ interface HouseCardProps {
     type: string
     bedrooms: number
     bathrooms: number
+    size?: number | null
     furnished: boolean
     status: string
     isFeatured?: boolean
@@ -62,13 +63,9 @@ export default function HouseCard({ house, showStatus = false, index = 0 }: Hous
   const typeLabel = house.type.charAt(0) + house.type.slice(1).toLowerCase()
 
   return (
-    <Link
-      href={`/houses/${house.id}`}
-      className="card group block"
-      style={{ animationDelay: `${index * 100}ms` }}
-    >
+    <Link href={`/houses/${house.id}`} className="group block rounded-2xl border border-gray-100 bg-white overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-green-200" style={{ animationDelay: `${index * 100}ms` }}>
       {/* Image */}
-      <div className="relative aspect-video bg-gray-100 overflow-hidden">
+      <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
         {image ? (
           <Image
             src={image}
@@ -85,26 +82,19 @@ export default function HouseCard({ house, showStatus = false, index = 0 }: Hous
           </div>
         )}
 
-        {/* Price overlay */}
-        <div className="price-tag">
-          {house.price.toLocaleString()} RWF
-          <span className="text-gray-500 font-normal text-xs">/mo</span>
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
+        <div className="absolute bottom-3 left-3 bg-white px-3 py-1.5 rounded-full font-bold text-[#0d4f2e] text-sm shadow-sm">
+          {house.price.toLocaleString()} RWF/mo
         </div>
 
         {/* Featured ribbon */}
         {house.isFeatured && (
-          <div className="absolute top-3 left-3 bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
+          <div className="absolute top-3 right-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1">
             <Star size={12} weight="fill" />
             Featured
           </div>
         )}
-
-        {/* Furnished badge */}
-        {house.furnished && (
-          <div className="absolute top-3 right-12 bg-[#16a34a] text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">
-            Furnished
-          </div>
-        )}
+        <div className="absolute top-3 left-3 bg-[#16a34a] text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-sm">✓ Verified</div>
 
         {/* Favorite button */}
         <button
@@ -135,39 +125,14 @@ export default function HouseCard({ house, showStatus = false, index = 0 }: Hous
 
       {/* Content */}
       <div className="p-4">
-        {/* Badges row */}
-        <div className="flex items-center gap-2 mb-2">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-[#0d4f2e]/10 text-[#0d4f2e]">
-            {house.district}
-          </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-            {typeLabel}
-          </span>
-        </div>
-
-        <h3 className="font-semibold text-gray-900 text-base leading-snug line-clamp-2 group-hover:text-[#0d4f2e] transition-colors mb-2">
-          {house.title}
-        </h3>
-
-        <div className="flex items-center gap-1 text-gray-500 text-xs mb-3">
-          <MapPin size={14} weight="fill" className="text-[#16a34a]" />
-          <span>{house.location}, {house.district}</span>
-        </div>
-
-        {/* Features */}
+        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 mb-2">{typeLabel}</div>
+        <h3 className="font-semibold text-gray-900 text-base line-clamp-1 mb-1">{house.title}</h3>
+        <div className="flex items-center gap-1 text-gray-500 text-sm mb-3"><MapPin size={14} weight="regular" className="text-[#16a34a]" />{house.location}</div>
         <div className="flex items-center gap-3 text-xs text-gray-600 mb-3">
-          <div className="flex items-center gap-1">
-            <Bed size={14} weight="duotone" />
-            <span>{house.bedrooms} bed{house.bedrooms !== 1 ? 's' : ''}</span>
-          </div>
-          <div className="w-1 h-1 rounded-full bg-gray-300" />
-          <div className="flex items-center gap-1">
-            <Bathtub size={14} weight="duotone" />
-            <span>{house.bathrooms} bath{house.bathrooms !== 1 ? 's' : ''}</span>
-          </div>
+          <div className="flex items-center gap-1"><Bed size={14} weight="regular" /><span>{house.bedrooms} beds</span></div>
+          <div className="flex items-center gap-1"><Bathtub size={14} weight="regular" /><span>{house.bathrooms} baths</span></div>
+          <div className="flex items-center gap-1"><Ruler size={14} weight="regular" /><span>{house.size ? `${house.size}m²` : 'N/A'}</span></div>
         </div>
-
-        {/* Landlord row */}
         <div className="divider !my-3" />
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
@@ -176,12 +141,7 @@ export default function HouseCard({ house, showStatus = false, index = 0 }: Hous
             </div>
             <span className="text-xs text-gray-500 truncate max-w-[100px]">{house.landlord.name}</span>
           </div>
-          {house.landlord.isVerified && (
-            <div className="badge-verified text-xs">
-              <ShieldCheck size={12} weight="fill" />
-              Verified
-            </div>
-          )}
+          <span className="btn-secondary !px-3 !py-1.5 !text-xs">View Details</span>
         </div>
       </div>
     </Link>

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,20 +17,24 @@ import {
 
 // Dynamic SEO metadata
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const house = await prisma.house.findUnique({
-    where: { id: params.id },
-    include: { images: { take: 1 } },
-  })
-  if (!house) return { title: 'House Not Found - InzuFinder' }
+  try {
+    const house = await prisma.house.findUnique({
+      where: { id: params.id },
+      include: { images: { take: 1 } },
+    })
+    if (!house) return { title: 'House Not Found - InzuFinder' }
 
-  return {
-    title: `${house.title} - ${house.price.toLocaleString()} RWF/mo | InzuFinder`,
-    description: house.description.slice(0, 160),
-    openGraph: {
-      title: house.title,
-      description: `${house.price.toLocaleString()} RWF/month in ${house.location}, ${house.district}`,
-      images: house.images[0]?.url ? [house.images[0].url] : [],
-    },
+    return {
+      title: `${house.title} - ${house.price.toLocaleString()} RWF/mo | InzuFinder`,
+      description: house.description.slice(0, 160),
+      openGraph: {
+        title: house.title,
+        description: `${house.price.toLocaleString()} RWF/month in ${house.location}, ${house.district}`,
+        images: house.images[0]?.url ? [house.images[0].url] : [],
+      },
+    }
+  } catch {
+    return { title: 'InzuFinder Property' }
   }
 }
 
@@ -72,21 +77,22 @@ async function getSimilar(house: { id: string; district: string; type: string })
 }
 
 export default async function HouseDetailPage({ params }: { params: { id: string } }) {
-  const house = await getHouse(params.id)
-  if (!house) notFound()
+  try {
+    const house = await getHouse(params.id)
+    if (!house) notFound()
 
-  const session = await getServerSession()
-  const isLandlord = session?.id === house.landlord.id
-  const similar = await getSimilar(house)
+    const session = await getServerSession()
+    const isLandlord = session?.id === house.landlord.id
+    const similar = await getSimilar(house)
 
   const whatsappLink = house.landlord.phone
     ? `https://wa.me/${house.landlord.phone.replace(/\+/g, '')}?text=${encodeURIComponent(`Hi, I found your listing "${house.title}" on InzuFinder and I'm interested.`)}`
     : null
 
-  return (
-    <>
-      <Header />
-      <main className="bg-gray-50 min-h-screen py-8">
+    return (
+      <>
+        <Header />
+        <main className="bg-gray-50 min-h-screen py-8">
         <div className="container-app">
           {/* Breadcrumbs */}
           <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
@@ -320,8 +326,22 @@ export default async function HouseDetailPage({ params }: { params: { id: string
             </section>
           )}
         </div>
-      </main>
-      <Footer />
-    </>
-  )
+        </main>
+        <Footer />
+      </>
+    )
+  } catch {
+    return (
+      <>
+        <Header />
+        <main className="min-h-[60vh] flex items-center justify-center bg-gray-50">
+          <div className="text-center p-8">
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">Something went wrong</h1>
+            <p className="text-gray-600">Please try again in a moment.</p>
+          </div>
+        </main>
+        <Footer />
+      </>
+    )
+  }
 }

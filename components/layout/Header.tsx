@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { motion, AnimatePresence } from 'framer-motion'
 import { House, List, X, SignOut, Gear, GridFour, Heart } from '@phosphor-icons/react'
+import { useScrollPosition } from '@/hooks/useScrollPosition'
 
 interface User {
   id: string
@@ -16,7 +18,7 @@ interface User {
 export default function Header() {
   const [user, setUser] = useState<User | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const scrolled = useScrollPosition(80)
   const [savedCount, setSavedCount] = useState(0)
   const pathname = usePathname()
   const router = useRouter()
@@ -40,13 +42,6 @@ export default function Header() {
     }
   }, [pathname])
 
-  // Glassmorphism on scroll
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 10)
-    window.addEventListener('scroll', handler)
-    return () => window.removeEventListener('scroll', handler)
-  }, [])
-
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' })
     setUser(null)
@@ -68,10 +63,10 @@ export default function Header() {
           <nav className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2.5 flex-shrink-0 group">
-              <div className="w-9 h-9 bg-gradient-to-br from-[#0d4f2e] to-[#16a34a] rounded-xl flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
+              <div className={`bg-gradient-to-br from-[#0d4f2e] to-[#16a34a] rounded-xl flex items-center justify-center transition-all duration-200 group-hover:scale-105 ${scrolled ? 'w-8 h-8' : 'w-9 h-9'}`}>
                 <House size={20} weight="fill" className="text-white" />
               </div>
-              <span className="text-xl font-bold text-gray-900 tracking-tight">
+              <span className={`font-bold text-gray-900 tracking-tight transition-all ${scrolled ? 'text-lg' : 'text-xl'}`}>
                 Inzu<span className="text-[#0d4f2e]">Finder</span>
               </span>
             </Link>
@@ -171,15 +166,22 @@ export default function Header() {
       </header>
 
       {/* Mobile Slide-In Drawer */}
+      <AnimatePresence>
       {menuOpen && (
-        <div className="md:hidden fixed inset-0 z-[60]">
+        <motion.div className="md:hidden fixed inset-0 z-[60]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={() => setMenuOpen(false)}
           />
           {/* Drawer */}
-          <aside className="absolute top-0 right-0 w-72 h-full bg-white shadow-2xl flex flex-col animate-fade-in">
+          <motion.aside
+            className="absolute top-0 right-0 w-72 h-full bg-white shadow-2xl flex flex-col"
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+          >
             <div className="p-4 border-b border-gray-100 flex items-center justify-between">
               <span className="font-bold text-lg text-gray-900">Menu</span>
               <button
@@ -260,9 +262,10 @@ export default function Header() {
                 </>
               )}
             </nav>
-          </aside>
-        </div>
+          </motion.aside>
+        </motion.div>
       )}
+      </AnimatePresence>
     </>
   )
 }

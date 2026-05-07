@@ -67,22 +67,22 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left — Form */}
-      <div className="flex-1 flex items-center justify-center p-6 sm:p-10">
+    <div className="min-h-screen flex bg-[#fafaf9]">
+      <div className="hidden lg:flex w-[40%] bg-gradient-to-br from-[#0d4f2e] to-[#16a34a] text-white p-12 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-8 w-32 h-32 rounded-full border border-white" />
+          <div className="absolute bottom-8 right-10 w-44 h-44 rounded-full border border-white" />
+        </div>
+        <div className="relative z-10 flex flex-col justify-between">
+          <Link href="/" className="flex items-center gap-2 text-xl font-bold"><House size={24} weight="fill" />InzuFinder</Link>
+          <h2 className="text-4xl font-bold tracking-tight max-w-md">Find your perfect home in Kigali</h2>
+          <div className="space-y-2 text-green-100"><p>✓ Admin Verified</p><p>✓ No Fake Listings</p><p>✓ Free to Browse</p></div>
+        </div>
+      </div>
+      <div className="w-full lg:w-[60%] flex items-center justify-center p-6 sm:p-10 bg-white">
         <div className="w-full max-w-md">
-          <Link href="/" className="flex items-center gap-2.5 mb-10">
-            <div className="w-9 h-9 bg-gradient-to-br from-[#0d4f2e] to-[#16a34a] rounded-xl flex items-center justify-center">
-              <House size={20} weight="fill" className="text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">
-              Inzu<span className="text-[#0d4f2e]">Finder</span>
-            </span>
-          </Link>
-
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome back</h1>
-          <p className="text-gray-500 mb-8">Sign in to your account to continue</p>
-
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Welcome back 👋</h1>
+          <p className="text-gray-600 mb-8">Sign in to continue finding your home</p>
           <form onSubmit={handleSubmit} className="space-y-5">
             {errors.general && (
               <div className="p-3 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100">
@@ -94,14 +94,7 @@ export default function LoginPage() {
               <label htmlFor="email" className="form-label">Email</label>
               <div className="relative">
                 <EnvelopeSimple size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="you@example.com"
-                  className={`form-input pl-10 ${errors.email ? 'border-red-300 focus:ring-red-500' : ''}`}
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                />
+                <input type="email" id="email" placeholder="you@example.com" className={`form-input pl-10 ${errors.email ? 'border-red-300 focus:ring-red-500' : ''}`} value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
               </div>
               {errors.email && <p className="form-error">{errors.email}</p>}
             </div>
@@ -110,14 +103,7 @@ export default function LoginPage() {
               <label htmlFor="password" className="form-label">Password</label>
               <div className="relative">
                 <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="password"
-                  placeholder="Enter your password"
-                  className={`form-input pl-10 pr-10 ${errors.password ? 'border-red-300 focus:ring-red-500' : ''}`}
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                />
+                <input type={showPassword ? 'text' : 'password'} id="password" placeholder="Enter your password" className={`form-input pl-10 pr-10 ${errors.password ? 'border-red-300 focus:ring-red-500' : ''}`} value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -135,7 +121,7 @@ export default function LoginPage() {
                 <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-[#0d4f2e] focus:ring-[#16a34a]" />
                 <span className="text-sm text-gray-600">Remember me</span>
               </label>
-              <span className="text-sm text-[#0d4f2e] font-medium cursor-pointer hover:underline">Forgot Password?</span>
+              <Link href="#" className="text-sm text-[#0d4f2e] font-medium hover:underline">Forgot password?</Link>
             </div>
 
             <button type="submit" disabled={loading} className="btn-primary w-full py-3">
@@ -146,35 +132,13 @@ export default function LoginPage() {
               )}
             </button>
           </form>
-
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-200" /></div>
+            <div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-3 text-gray-400">or</span></div>
+          </div>
           <p className="mt-6 text-center text-sm text-gray-500">
-            Don&apos;t have an account?{' '}
-            <Link href="/register" className="text-[#0d4f2e] font-semibold hover:underline">
-              Create one
-            </Link>
+            Don&apos;t have an account? <Link href="/register" className="text-[#0d4f2e] font-semibold hover:underline">Sign up</Link>
           </p>
-        </div>
-      </div>
-
-      {/* Right — Branding Panel */}
-      <div className="hidden lg:flex flex-col items-center justify-center w-[45%] bg-gradient-to-br from-[#0d4f2e] to-[#0a3d23] text-white p-16 relative overflow-hidden">
-        <div className="absolute top-10 right-10 w-64 h-64 rounded-full border-2 border-white/5" />
-        <div className="absolute bottom-10 left-10 w-48 h-48 rounded-full border border-white/5" />
-        <div className="relative z-10 text-center max-w-sm">
-          <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm">
-            <House size={32} weight="fill" className="text-white" />
-          </div>
-          <h2 className="text-3xl font-bold mb-4">InzuFinder</h2>
-          <p className="text-green-200 text-lg leading-relaxed">
-            Kigali&apos;s most trusted rental platform. Every listing is admin-verified for your safety.
-          </p>
-          <div className="mt-8 flex items-center justify-center gap-6 text-sm text-green-300">
-            <span>Admin-Verified</span>
-            <span className="w-1 h-1 rounded-full bg-green-400" />
-            <span>No Fake Listings</span>
-            <span className="w-1 h-1 rounded-full bg-green-400" />
-            <span>Rwanda-First</span>
-          </div>
         </div>
       </div>
     </div>

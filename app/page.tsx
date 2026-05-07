@@ -6,7 +6,9 @@ import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import HouseCard from '@/components/houses/HouseCard'
 import HomeClient from '@/components/home/HomeClient'
-import { House, Users, MapPin, ShieldCheck, MagnifyingGlass, Bed } from '@phosphor-icons/react/dist/ssr'
+import HomeHero from '@/components/home/HomeHero'
+import ScrollReveal from '@/components/ScrollReveal'
+import { House, ShieldCheck, Lightning, Users, Heart, Quotes, MapPin, MagnifyingGlass, Bed } from '@phosphor-icons/react/dist/ssr'
 
 async function getFeaturedHouses() {
   return prisma.house.findMany({
@@ -21,11 +23,16 @@ async function getFeaturedHouses() {
 }
 
 async function getStats() {
-  const [houses, users] = await Promise.all([
-    prisma.house.count({ where: { status: 'APPROVED' } }),
-    prisma.user.count({ where: { role: 'TENANT' } }),
-  ])
-  return { houses, users }
+  if (!process.env.DATABASE_URL) return { houses: 0, users: 0 }
+  try {
+    const [houses, users] = await Promise.all([
+      prisma.house.count({ where: { status: 'APPROVED' } }),
+      prisma.user.count({ where: { role: 'TENANT' } }),
+    ])
+    return { houses, users }
+  } catch {
+    return { houses: 0, users: 0 }
+  }
 }
 
 export default async function HomePage() {
@@ -35,9 +42,13 @@ export default async function HomePage() {
     <>
       <Header />
       <main>
-        {/* Hero Section — Full-width with background image */}
+        <div className="bg-[#0d4f2e] text-white py-2 overflow-hidden">
+          <div className="marquee whitespace-nowrap">
+            <span className="mx-4">✓ Admin Verified Listings • ✓ No Fake Posts • ✓ Kigali&apos;s #1 Rental Platform • ✓ 100% Free to Browse • ✓ RDB Registered Business •</span>
+            <span className="mx-4">✓ Admin Verified Listings • ✓ No Fake Posts • ✓ Kigali&apos;s #1 Rental Platform • ✓ 100% Free to Browse • ✓ RDB Registered Business •</span>
+          </div>
+        </div>
         <section className="relative min-h-[620px] flex items-end overflow-hidden">
-          {/* Background Image */}
           <Image
             src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1600"
             alt="Modern home in Kigali"
@@ -47,103 +58,33 @@ export default async function HomePage() {
             sizes="100vw"
           />
 
-          {/* Dark green gradient overlay */}
           <div className="absolute inset-0 hero-overlay" />
-
-          {/* Hero Content — bottom-left editorial positioning */}
-          <div className="container-app relative z-10 pb-16 pt-32 w-full">
-            <div className="max-w-3xl">
-              {/* Eyebrow */}
-              <p className="text-[#16a34a] text-xs font-bold uppercase tracking-[0.2em] mb-4">
-                Kigali&apos;s Most Trusted Rental Platform
-              </p>
-
-              {/* H1 */}
-              <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight mb-5 leading-[1.1]">
-                Find Your Perfect<br />Home in Kigali
-              </h1>
-
-              {/* Subtext */}
-              <p className="text-white/70 text-lg max-w-xl leading-relaxed mb-10">
-                Verified listings only. No fake posts. Every home reviewed by our team.
-              </p>
-
-              {/* Glassmorphism Search Bar */}
-              <div className="glass-search rounded-2xl p-2 sm:p-3 max-w-2xl">
-                <form action="/houses" method="GET" className="flex flex-col sm:flex-row gap-2">
-                  <select
-                    name="district"
-                    id="hero-district"
-                    className="flex-1 px-4 py-3 rounded-xl text-white text-sm bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#16a34a] placeholder:text-white/50 appearance-none"
-                    defaultValue=""
-                  >
-                    <option value="" className="text-gray-900">All Districts</option>
-                    <option value="Gasabo" className="text-gray-900">Gasabo</option>
-                    <option value="Kicukiro" className="text-gray-900">Kicukiro</option>
-                    <option value="Nyarugenge" className="text-gray-900">Nyarugenge</option>
-                  </select>
-                  <select
-                    name="type"
-                    id="hero-type"
-                    className="flex-1 px-4 py-3 rounded-xl text-white text-sm bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#16a34a] placeholder:text-white/50 appearance-none"
-                    defaultValue=""
-                  >
-                    <option value="" className="text-gray-900">All Types</option>
-                    <option value="HOUSE" className="text-gray-900">House</option>
-                    <option value="APARTMENT" className="text-gray-900">Apartment</option>
-                    <option value="STUDIO" className="text-gray-900">Studio</option>
-                    <option value="VILLA" className="text-gray-900">Villa</option>
-                  </select>
-                  <select
-                    name="bedrooms"
-                    id="hero-bedrooms"
-                    className="flex-1 px-4 py-3 rounded-xl text-white text-sm bg-white/10 border border-white/10 focus:outline-none focus:ring-2 focus:ring-[#16a34a] placeholder:text-white/50 appearance-none"
-                    defaultValue=""
-                  >
-                    <option value="" className="text-gray-900">Bedrooms</option>
-                    <option value="1" className="text-gray-900">1 Bedroom</option>
-                    <option value="2" className="text-gray-900">2 Bedrooms</option>
-                    <option value="3" className="text-gray-900">3 Bedrooms</option>
-                    <option value="4" className="text-gray-900">4+ Bedrooms</option>
-                  </select>
-                  <button
-                    type="submit"
-                    id="hero-search-btn"
-                    className="btn-primary px-8 py-3 flex-shrink-0 flex items-center gap-2"
-                  >
-                    <MagnifyingGlass size={18} weight="bold" />
-                    Search
-                  </button>
-                </form>
-              </div>
-
-              {/* Quick filter chips */}
-              <div className="flex flex-wrap gap-2 mt-5">
-                {[
-                  { label: 'Gasabo', href: '/houses?district=Gasabo' },
-                  { label: 'Kicukiro', href: '/houses?district=Kicukiro' },
-                  { label: 'Nyarugenge', href: '/houses?district=Nyarugenge' },
-                  { label: 'Furnished', href: '/houses?furnished=true' },
-                  { label: 'Studio', href: '/houses?type=STUDIO' },
-                  { label: 'Under 200k RWF', href: '/houses?maxPrice=200000' },
-                ].map((tag) => (
-                  <Link
-                    key={tag.label}
-                    href={tag.href}
-                    className="text-xs bg-white/10 hover:bg-white/20 text-white border border-white/20 px-3 py-1.5 rounded-full transition-all duration-200 hover:scale-105"
-                  >
-                    {tag.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
+          <HomeHero />
         </section>
 
-        {/* Stats bar — with animated counters */}
-        <HomeClient stats={stats} />
+        <ScrollReveal><HomeClient stats={stats} /></ScrollReveal>
 
-        {/* Featured listings */}
+        <ScrollReveal className="section bg-white">
+          <div className="container-app">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-2 text-center">Explore by Neighborhood</h2>
+            <p className="text-gray-600 text-center mb-10">Find your perfect home in Kigali&apos;s most popular areas</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { district: 'Gasabo', places: 'Kacyiru • Kimihurura • Remera • Gisozi', badge: 'Most Popular', gradient: 'from-[#0d4f2e] to-[#166534]' },
+                { district: 'Kicukiro', places: 'Niboye • Gikondo • Kagarama • Kanombe', gradient: 'from-[#16a34a] to-[#0d4f2e]' },
+                { district: 'Nyarugenge', places: 'CBD • Nyamirambo • Muhima • Gitega', gradient: 'from-[#14532d] to-[#0d4f2e]' },
+              ].map((item) => (
+                <Link key={item.district} href={`/houses?district=${item.district}`} className={`h-48 rounded-2xl p-6 text-white bg-gradient-to-br ${item.gradient} transition-transform hover:scale-105`}>
+                  <MapPin size={28} weight="duotone" />
+                  <h3 className="text-2xl font-bold tracking-tight mt-4">{item.district} District</h3>
+                  <p className="text-green-100 text-sm mt-2">{item.places}</p>
+                  {item.badge && <span className="mt-4 inline-block px-3 py-1 rounded-full bg-white/20 text-xs">{item.badge}</span>}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </ScrollReveal>
+
         <section className="section">
           <div className="container-app">
             <div className="flex items-end justify-between mb-10">
@@ -185,8 +126,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* How it works */}
-        <section className="section bg-white">
+        <ScrollReveal className="section bg-white">
           <div className="container-app">
             <div className="text-center mb-12">
               <p className="text-[#16a34a] font-semibold text-sm uppercase tracking-wider mb-2">How It Works</p>
@@ -227,7 +167,49 @@ export default async function HomePage() {
               ))}
             </div>
           </div>
-        </section>
+        </ScrollReveal>
+
+        <ScrollReveal className="section">
+          <div className="container-app">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-10">Why Choose InzuFinder?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                { icon: <ShieldCheck size={26} weight="duotone" className="text-[#0d4f2e]" />, title: 'Zero Fake Listings', desc: 'Every property manually reviewed' },
+                { icon: <Lightning size={26} weight="duotone" className="text-[#0d4f2e]" />, title: 'Find in Minutes', desc: 'Advanced filters save your time' },
+                { icon: <Users size={26} weight="duotone" className="text-[#0d4f2e]" />, title: 'Verified Landlords', desc: 'All landlords ID-verified' },
+                { icon: <Heart size={26} weight="duotone" className="text-[#0d4f2e]" />, title: 'Rwanda First', desc: 'Built specifically for Kigali renters' },
+              ].map((feature) => (
+                <div key={feature.title} className="rounded-2xl border border-green-100 bg-white p-6 hover:bg-[#f0fdf4] transition-all">
+                  <div className="w-12 h-12 bg-[#f0fdf4] rounded-2xl flex items-center justify-center mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-bold tracking-tight text-gray-900">{feature.title}</h3>
+                  <p className="text-gray-600 mt-2">{feature.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </ScrollReveal>
+
+        <ScrollReveal className="section bg-white">
+          <div className="container-app">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-10">What Kigali Renters Say</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { quote: 'I found my apartment in Remera within 2 days. No more calling fake numbers!', who: 'Amina K., Gasabo' },
+                { quote: 'As a landlord, I got 3 genuine tenants in my first week. Incredible platform.', who: 'Jean-Paul M., Landlord' },
+                { quote: 'Finally a platform that shows real verified houses in Kigali. Game changer!', who: 'Claudine U., Kicukiro' },
+              ].map((item) => (
+                <div key={item.who} className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                  <Quotes size={22} weight="duotone" className="text-[#16a34a] mb-4" />
+                  <p className="text-gray-700 mb-5">&quot;{item.quote}&quot;</p>
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-full bg-[#16a34a] text-white flex items-center justify-center font-bold">{item.who.charAt(0)}</div>
+                    <div><p className="text-sm font-semibold text-gray-900">{item.who}</p><p className="text-xs text-amber-500">★★★★★</p></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </ScrollReveal>
 
         {/* CTA Section */}
         <section className="section">

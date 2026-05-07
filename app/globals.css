@@ -31,6 +31,11 @@
     scroll-behavior: smooth;
   }
 
+  *:focus-visible {
+    outline: 2px solid #16a34a;
+    outline-offset: 2px;
+  }
+
   body {
     font-family: var(--font-inter, 'Inter', system-ui, sans-serif);
     background-color: var(--color-warm-white);
@@ -58,6 +63,7 @@
     box-shadow: 0 4px 14px rgba(13, 79, 46, 0.3);
     transform: scale(1.02);
   }
+  .btn-primary:active { transform: scale(0.98); filter: brightness(1.02); }
 
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-gray-800 font-semibold rounded-xl border border-gray-200 hover:border-[#16a34a] hover:text-[#0d4f2e] active:scale-95 transition-all duration-200;
@@ -92,7 +98,12 @@
 
   /* === Form Elements === */
   .form-input {
-    @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#16a34a] focus:border-transparent transition-all duration-200;
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder:text-gray-400 focus:outline-none transition-all duration-200;
+    box-shadow: none;
+  }
+  .form-input:focus {
+    border-color: #16a34a;
+    box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
   }
 
   .form-label {
@@ -289,6 +300,17 @@
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee {
+  display: inline-flex;
+  min-width: 200%;
+  animation: marquee 25s linear infinite;
 }
 
 /* === Leaflet Map Overrides === */
