@@ -25,13 +25,19 @@ export default function Header() {
   const pathname = usePathname()
   const router = useRouter()
 
-  // Fetch current user on route change
+  // Fetch current user (treat 401 as guest; avoid spamming requests)
   useEffect(() => {
-    fetch('/api/auth/me')
-      .then((r) => r.json())
+    const controller = new AbortController()
+    fetch('/api/auth/me', { signal: controller.signal })
+      .then(async (r) => {
+        if (r.status === 401) return { user: null }
+        return await r.json()
+      })
       .then((data) => setUser(data.user || null))
-      .catch(() => null)
-  }, [pathname])
+      .catch(() => setUser(null))
+    return () => controller.abort()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // Read favorites count from localStorage
   useEffect(() => {

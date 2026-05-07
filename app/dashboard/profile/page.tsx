@@ -12,7 +12,10 @@ export default function ProfilePage() {
 
   useEffect(() => {
     fetch('/api/auth/me')
-      .then((r) => r.json())
+      .then(async (r) => {
+        if (r.status === 401) return { user: null }
+        return await r.json()
+      })
       .then((data) => {
         if (data.user) {
           setUser({

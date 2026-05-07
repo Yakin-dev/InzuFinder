@@ -19,20 +19,50 @@ export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [loading, setLoading] = useState(true)
   const [role, setRole] = useState<string | null>(null)
+  const [unauthenticated, setUnauthenticated] = useState(false)
 
   useEffect(() => {
-    fetch('/api/auth/me')
-      .then((r) => r.json())
-      .then((data) => setRole(data?.user?.role || null))
-      .catch(() => setRole(null))
-
-    fetchBookings()
+    const controller = new AbortController()
+    const run = async () => {
+      try {
+        const meRes = await fetch('/api/auth/me', { signal: controller.signal })
+        if (meRes.status === 401) {
+          setRole(null)
+          setBookings([])
+          setUnauthenticated(true)
+          setLoading(false)
+          return
+        }
+        const meData = await meRes.json()
+        const nextRole = meData?.user?.role || null
+        setRole(nextRole)
+        setUnauthenticated(!nextRole)
+        if (!nextRole) {
+          setBookings([])
+          setLoading(false)
+          return
+        }
+        await fetchBookings(controller.signal)
+      } catch {
+        setRole(null)
+        setUnauthenticated(true)
+        setBookings([])
+        setLoading(false)
+      }
+    }
+    void run()
+    return () => controller.abort()
   }, [])
 
-  const fetchBookings = async () => {
+  const fetchBookings = async (signal?: AbortSignal) => {
     setLoading(true)
     try {
-      const res = await fetch('/api/bookings')
+      const res = await fetch('/api/bookings', { signal })
+      if (res.status === 401) {
+        setBookings([])
+        setUnauthenticated(true)
+        return
+      }
       const data = await res.json()
       setBookings(data.bookings || [])
     } catch {
@@ -79,6 +109,15 @@ export default function BookingsPage() {
               <div className="h-3 animate-shimmer rounded w-1/3" />
             </div>
           ))}
+        </div>
+      ) : unauthenticated ? (
+        <div className="card p-12 text-center">
+          <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <CalendarBlank size={28} weight="duotone" className="text-gray-400" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">Sign in to view bookings</h3>
+          <p className="text-gray-500 mb-5">You need an account to access booking requests.</p>
+          <a href="/login" className="btn-primary inline-flex">Go to Login</a>
         </div>
       ) : bookings.length > 0 ? (
         <div className="space-y-4">

@@ -32,6 +32,7 @@ interface HouseCardProps {
 
 export default function HouseCard({ house, showStatus = false, index = 0 }: HouseCardProps) {
   const image = house.images[0]?.url || null
+  const isRemoteImage = Boolean(image && /^https?:\/\//i.test(image))
   const savedStore = useSavedPropertiesStore()
   const { ids: compareIds, toggle } = useCompareStore()
   const isCompared = compareIds.includes(house.id)
@@ -63,6 +64,7 @@ export default function HouseCard({ house, showStatus = false, index = 0 }: Hous
             className="house-image"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             loading="lazy"
+            unoptimized={isRemoteImage}
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-green-50 to-emerald-100">

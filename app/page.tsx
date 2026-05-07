@@ -62,6 +62,7 @@ export default async function HomePage() {
             className="object-cover"
             priority
             sizes="100vw"
+            unoptimized
           />
 
           <div className="absolute inset-0 hero-overlay" />

@@ -491,7 +491,7 @@ async function main() {
       nearMainRoad: true,
       hasParking: true,
       whatsappNumber: landlord1.phone ?? undefined,
-      images: ['https://images.unsplash.com/photo-1515165562835-c4c4b6b8b6b9?w=1200'],
+      images: ['https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=1200'],
     },
     {
       title: 'Restaurant Space in Nyamirambo',

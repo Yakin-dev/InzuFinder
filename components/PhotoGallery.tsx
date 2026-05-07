@@ -17,9 +17,11 @@ export function PhotoGallery({
 }) {
   const [open, setOpen] = React.useState(false)
   const [index, setIndex] = React.useState(0)
+  const [broken, setBroken] = React.useState<Record<string, boolean>>({})
 
   const slides = images.map((img) => ({ src: img.url }))
   const main = images[0]?.url
+  const isRemoteUrl = (url: string) => /^https?:\/\//i.test(url)
 
   return (
     <div className={cn('card overflow-hidden', className)}>
@@ -34,12 +36,26 @@ export function PhotoGallery({
           }}
         >
           {main ? (
-            <Image src={main} alt={title} fill className="object-cover" priority sizes="(max-width: 1024px) 100vw, 60vw" />
+            <Image
+              src={main}
+              alt={title}
+              fill
+              className="object-cover"
+              priority
+              sizes="(max-width: 1024px) 100vw, 60vw"
+              onError={() => setBroken((p) => ({ ...p, [main]: true }))}
+              unoptimized={isRemoteUrl(main)}
+            />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-500">
               No photos yet
             </div>
           )}
+          {main && broken[main] ? (
+            <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-500 bg-gray-100">
+              Photo unavailable
+            </div>
+          ) : null}
         </button>
 
         <div className="grid grid-cols-4 lg:grid-cols-2 gap-2 lg:col-span-2">
@@ -55,7 +71,20 @@ export function PhotoGallery({
                   setOpen(true)
                 }}
               >
-                <Image src={img.url} alt={`${title} ${realIndex + 1}`} fill className="object-cover" sizes="25vw" />
+                <Image
+                  src={img.url}
+                  alt={`${title} ${realIndex + 1}`}
+                  fill
+                  className="object-cover"
+                  sizes="25vw"
+                  onError={() => setBroken((p) => ({ ...p, [img.url]: true }))}
+                  unoptimized={isRemoteUrl(img.url)}
+                />
+                {broken[img.url] ? (
+                  <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-500 bg-gray-100">
+                    Unavailable
+                  </div>
+                ) : null}
                 {i === 3 && images.length > 5 ? (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-bold">
                     +{images.length - 5}
