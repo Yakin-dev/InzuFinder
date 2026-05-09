@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import {
-  ChartBar, House, ListChecks, UsersThree, Flag, SignOut, List, X, ArrowLeft, Gear
+  ChartBar, ListChecks, Flag, SignOut, List, X, ArrowLeft, Gear
 } from '@phosphor-icons/react'
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -14,8 +14,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: <ChartBar size={20} weight="duotone" /> },
-    { name: 'Approve Listings', href: '/admin/houses', icon: <ListChecks size={20} weight="duotone" /> },
-    { name: 'Users', href: '/admin/users', icon: <UsersThree size={20} weight="duotone" /> },
+    { name: 'Pending Listings', href: '/admin/listings', icon: <ListChecks size={20} weight="duotone" /> },
     { name: 'Reports', href: '/admin/reports', icon: <Flag size={20} weight="duotone" /> },
   ]
 

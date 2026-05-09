@@ -2,12 +2,14 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { Eye, EyeSlash, EnvelopeSimple, Lock, House, SpinnerGap } from '@phosphor-icons/react'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectTo = searchParams.get('redirect')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -55,9 +57,15 @@ export default function LoginPage() {
 
       toast.success(`Welcome back, ${data.user.name}!`)
 
-      if (data.user.role === 'ADMIN') router.push('/dashboard/admin')
-      else if (data.user.role === 'LANDLORD') router.push('/dashboard/landlord')
-      else router.push('/houses')
+      if (redirectTo) {
+        router.push(redirectTo)
+      } else if (data.user.role === 'ADMIN') {
+        router.push('/admin')
+      } else if (data.user.role === 'LANDLORD') {
+        router.push('/dashboard/landlord')
+      } else {
+        router.push('/houses')
+      }
       router.refresh()
     } catch {
       setErrors({ general: 'Something went wrong. Please try again.' })
@@ -83,6 +91,12 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 mb-2">Welcome back</h1>
           <p className="text-gray-600 mb-8">Sign in to continue finding your home</p>
+          {process.env.NODE_ENV !== 'production' && (
+            <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
+              <p className="font-semibold">Demo admin login</p>
+              <p className="mt-1 font-mono">admin@inzufinder.rw</p>
+            </div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-5">
             {errors.general && (
               <div className="p-3 bg-red-50 text-red-600 rounded-xl text-sm border border-red-100">

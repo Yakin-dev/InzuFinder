@@ -58,8 +58,8 @@ export default function AdminHousesPage() {
   }
 
   const statusTabs = [
-    { label: 'Pending', value: 'PENDING', icon: <Clock size={16} /> },
-    { label: 'Approved', value: 'APPROVED', icon: <CheckCircle size={16} /> },
+    { label: 'Pending Review', value: 'PENDING', icon: <Clock size={16} /> },
+    { label: 'Live', value: 'APPROVED', icon: <CheckCircle size={16} /> },
     { label: 'Rejected', value: 'REJECTED', icon: <XCircle size={16} /> },
   ]
 
@@ -130,7 +130,7 @@ export default function AdminHousesPage() {
                 house.status === 'REJECTED' ? 'bg-red-100 text-red-700' :
                 'bg-yellow-100 text-yellow-700'
               }`}>
-                {house.status}
+                {house.status === 'PENDING' ? 'Pending Review' : house.status === 'APPROVED' ? 'Live' : 'Rejected'}
               </span>
 
               {/* Actions */}

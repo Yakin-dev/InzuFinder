@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-async function getHouse(id: string) {
+async function getHouse(id: string, session: any) {
   const house = await prisma.house.findUnique({
     where: { id },
     include: {
@@ -53,11 +53,24 @@ async function getHouse(id: string) {
 
   if (!house) return null
 
-  // Increment view count
-  await prisma.house.update({
-    where: { id },
-    data: { viewCount: { increment: 1 } },
-  }).catch(() => {})
+  // Security check: Only allow access if:
+  // 1. Listing is APPROVED (public)
+  // 2. User is the landlord of the listing
+  // 3. User is ADMIN
+  if (house.status !== 'APPROVED') {
+    if (!session) return null
+    if (session.role !== 'ADMIN' && session.id !== house.landlord.id) {
+      return null
+    }
+  }
+
+  // Increment view count only for public listings
+  if (house.status === 'APPROVED') {
+    await prisma.house.update({
+      where: { id },
+      data: { viewCount: { increment: 1 } },
+    }).catch(() => {})
+  }
 
   return house
 }
@@ -80,10 +93,10 @@ async function getSimilar(house: { id: string; district: string; type: string })
 
 export default async function HouseDetailPage({ params }: { params: { id: string } }) {
   try {
-    const house = await getHouse(params.id)
+    const session = await getServerSession()
+    const house = await getHouse(params.id, session)
     if (!house) notFound()
 
-    const session = await getServerSession()
     const isLandlord = session?.id === house.landlord.id
     const similar = await getSimilar(house)
 

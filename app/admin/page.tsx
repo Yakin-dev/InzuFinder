@@ -74,7 +74,7 @@ export default async function AdminDashboardPage() {
         <div className="card">
           <div className="p-5 border-b border-gray-100 flex items-center justify-between">
             <h2 className="font-bold text-gray-900">Pending Listings</h2>
-            <Link href="/admin/houses" className="text-sm font-medium text-[#16a34a] hover:text-[#0d4f2e]">View All</Link>
+            <Link href="/admin/listings" className="text-sm font-medium text-[#16a34a] hover:text-[#0d4f2e]">View All</Link>
           </div>
           {data.pendingListings.length > 0 ? (
             <ul className="divide-y divide-gray-100">

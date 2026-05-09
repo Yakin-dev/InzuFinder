@@ -27,9 +27,11 @@ export async function GET(req: NextRequest) {
     const skip = (page - 1) * limit
 
     const where: Record<string, unknown> = {}
+    const session = await getSessionFromRequest(req)
 
-    // Admin can filter by specific status; default to APPROVED for public
-    if (status && ['PENDING', 'APPROVED', 'REJECTED'].includes(status)) {
+    // Only admins can query non-public listing statuses.
+    // Non-admin users can only see APPROVED listings.
+    if (status && session?.role === 'ADMIN' && ['PENDING', 'APPROVED', 'REJECTED'].includes(status)) {
       where.status = status
     } else {
       where.status = 'APPROVED'
@@ -37,7 +39,6 @@ export async function GET(req: NextRequest) {
 
     // Landlord dashboard: show own listings regardless of status
     if (landlordFilter === 'me') {
-      const session = await getSessionFromRequest(req)
       if (session) {
         where.landlordId = session.id
         delete where.status // show all statuses for own listings
