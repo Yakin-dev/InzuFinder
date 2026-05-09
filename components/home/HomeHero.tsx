@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import SmartSearch from '@/components/SmartSearch'
+import NewHeroSearch from '@/components/home/NewHeroSearch'
 
 export default function HomeHero() {
   const chips = [
@@ -28,8 +28,8 @@ export default function HomeHero() {
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="text-white/70 text-lg max-w-xl leading-relaxed mb-10">
           Verified listings only. No fake posts. Every home reviewed by our team.
         </motion.p>
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }} className="glass-search rounded-2xl p-2 sm:p-3 max-w-2xl">
-          <SmartSearch />
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.5 }} className="max-w-4xl">
+          <NewHeroSearch />
         </motion.div>
         <div className="mt-5 overflow-x-auto"><div className="flex gap-2 flex-nowrap">
           {chips.map((tag, i) => (
