@@ -8,7 +8,8 @@ import HouseCard from '@/components/houses/HouseCard'
 import HomeClient from '@/components/home/HomeClient'
 import HomeHero from '@/components/home/HomeHero'
 import ScrollReveal from '@/components/ScrollReveal'
-import { House, ShieldCheck, Lightning, Users, Heart, Quotes, MapPin, MagnifyingGlass, Bed } from '@phosphor-icons/react/dist/ssr'
+import { House, ShieldCheck, Lightning, Users, Heart, MapPin, MagnifyingGlass, Bed } from '@phosphor-icons/react/dist/ssr'
+import { InzuTestimonials } from '@/components/ui/InzuTestimonials'
 
 async function getFeaturedHouses() {
   return prisma.house.findMany({
@@ -40,6 +41,63 @@ async function getStats() {
 
   return { houses, users, districts: 3, verified: 100 }
 }
+
+const TESTIMONIALS = [
+  {
+    image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&h=200&fit=crop&crop=face',
+    name: 'Amina Uwimana',
+    role: 'Teacher',
+    location: 'Gasabo',
+    text: 'I found my apartment in Remera within 2 days. No more calling fake numbers! InzuFinder saved me so much time and stress finding a verified home.',
+    rating: 5,
+    type: 'tenant' as const,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1507003211169-0a6dd7228f2d?w=200&h=200&fit=crop&crop=face',
+    name: 'Jean-Paul Mugisha',
+    role: 'Property Owner',
+    location: 'Kicukiro',
+    text: 'As a landlord I got 3 genuine tenants in my first week. The admin verification process builds real trust with serious renters.',
+    rating: 5,
+    type: 'landlord' as const,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face',
+    name: 'Claudine Umubyeyi',
+    role: 'Business Owner',
+    location: 'Nyarugenge',
+    text: 'Finally a platform showing real verified houses in Kigali. I found my shop space in Nyamirambo in just 3 days. A total game changer!',
+    rating: 5,
+    type: 'tenant' as const,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face',
+    name: 'Eric Nkurunziza',
+    role: 'Software Engineer',
+    location: 'Gasabo',
+    text: 'The filters are exactly what I needed. Found a furnished studio in Kacyiru under 150k RWF in one afternoon. Highly recommend InzuFinder!',
+    rating: 5,
+    type: 'tenant' as const,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=face',
+    name: 'Marie Claire Ingabire',
+    role: 'Nurse',
+    location: 'Kicukiro',
+    text: 'Safe, fast, and no brokers involved. I relocated from Musanze to Kigali and found my apartment before even arriving in the city.',
+    rating: 5,
+    type: 'tenant' as const,
+  },
+  {
+    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face',
+    name: 'Patrick Habimana',
+    role: 'Landlord and Investor',
+    location: 'Gasabo',
+    text: 'InzuFinder gives my listings professional visibility. Tenants trust my properties immediately because of the admin verification badge.',
+    rating: 5,
+    type: 'landlord' as const,
+  },
+]
 
 export default async function HomePage() {
   const [featured, stats] = await Promise.all([getFeaturedHouses(), getStats()])
@@ -196,27 +254,7 @@ export default async function HomePage() {
           </div>
         </ScrollReveal>
 
-        <ScrollReveal className="section bg-white">
-          <div className="container-app">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-10">What Kigali Renters Say</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { quote: 'I found my apartment in Remera within 2 days. No more calling fake numbers!', who: 'Amina K., Gasabo' },
-                { quote: 'As a landlord, I got 3 genuine tenants in my first week. Incredible platform.', who: 'Jean-Paul M., Landlord' },
-                { quote: 'Finally a platform that shows real verified houses in Kigali. Game changer!', who: 'Claudine U., Kicukiro' },
-              ].map((item) => (
-                <div key={item.who} className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                  <Quotes size={22} weight="duotone" className="text-[#16a34a] mb-4" />
-                  <p className="text-gray-700 mb-5">&quot;{item.quote}&quot;</p>
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-[#16a34a] text-white flex items-center justify-center font-bold">{item.who.charAt(0)}</div>
-                    <div><p className="text-sm font-semibold text-gray-900">{item.who}</p><p className="text-xs text-amber-500">★★★★★</p></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
+        <InzuTestimonials testimonials={TESTIMONIALS} />
 
         {/* CTA Section */}
         <section className="section">
