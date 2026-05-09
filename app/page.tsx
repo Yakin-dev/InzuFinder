@@ -10,6 +10,7 @@ import HomeHero from '@/components/home/HomeHero'
 import ScrollReveal from '@/components/ScrollReveal'
 import { House, ShieldCheck, Lightning, Users, Heart, MapPin, MagnifyingGlass, Bed } from '@phosphor-icons/react/dist/ssr'
 import { InzuTestimonials } from '@/components/ui/InzuTestimonials'
+import HowItWorks from '@/components/home/HowItWorks'
 
 async function getFeaturedHouses() {
   return prisma.house.findMany({
@@ -191,48 +192,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <ScrollReveal className="section bg-white">
-          <div className="container-app">
-            <div className="text-center mb-12">
-              <p className="text-[#16a34a] font-semibold text-sm uppercase tracking-wider mb-2">How It Works</p>
-              <h2 className="text-3xl font-bold text-gray-900">Simple, Safe, Trusted</h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  step: '01',
-                  icon: <MagnifyingGlass size={28} weight="duotone" className="text-[#0d4f2e]" />,
-                  title: 'Browse Listings',
-                  desc: 'Search verified properties across all Kigali districts. Filter by price, type, and location.',
-                },
-                {
-                  step: '02',
-                  icon: <ShieldCheck size={28} weight="duotone" className="text-[#0d4f2e]" />,
-                  title: 'Admin Verified',
-                  desc: 'Every listing is reviewed by our team before going live. No fake listings, ever.',
-                },
-                {
-                  step: '03',
-                  icon: <Bed size={28} weight="duotone" className="text-[#0d4f2e]" />,
-                  title: 'Send a Request',
-                  desc: 'Found your home? Send a booking request directly to the landlord through our platform.',
-                },
-              ].map((item) => (
-                <div key={item.step} className="text-center group">
-                  <div className="w-16 h-16 bg-[#0d4f2e]/5 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:bg-[#0d4f2e]/10 transition-colors">
-                    {item.icon}
-                  </div>
-                  <div className="inline-block text-xs font-bold text-[#0d4f2e] bg-[#0d4f2e]/5 px-2 py-1 rounded-full mb-3">
-                    Step {item.step}
-                  </div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
+        <HowItWorks />
 
         <ScrollReveal className="section">
           <div className="container-app">
