@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from '@/lib/auth'
 import {
-  UsersThree, House, Clock, CalendarCheck, Flag
+  UsersThree, House, Clock, CalendarCheck, Flag, ShieldCheck, ArrowRight, CheckCircle, XCircle, ChartLine, Bell
 } from '@phosphor-icons/react/dist/ssr'
 
 async function getAdminData() {
@@ -13,6 +13,13 @@ async function getAdminData() {
     prisma.booking.count(),
     prisma.report.count({ where: { resolved: false } }),
   ])
+
+  const landlordCount = await prisma.user.count({ where: { role: 'LANDLORD' } })
+  const tenantCount = await prisma.user.count({ where: { role: 'TENANT' } })
+  const approvedPropertiesCount = await prisma.house.count({ where: { status: 'APPROVED' } })
+  const rejectedPropertiesCount = await prisma.house.count({ where: { status: 'REJECTED' } })
+  
+  const approvalRate = propertiesCount > 0 ? Math.round((approvedPropertiesCount / propertiesCount) * 100) : 0
 
   const recentUsers = await prisma.user.findMany({
     orderBy: { createdAt: 'desc' },
@@ -30,7 +37,20 @@ async function getAdminData() {
     },
   })
 
-  return { usersCount, propertiesCount, pendingPropertiesCount, bookingsCount, reportsCount, recentUsers, pendingListings }
+  return { 
+    usersCount, 
+    propertiesCount, 
+    pendingPropertiesCount, 
+    bookingsCount, 
+    reportsCount, 
+    landlordCount,
+    tenantCount,
+    approvedPropertiesCount,
+    rejectedPropertiesCount,
+    approvalRate,
+    recentUsers, 
+    pendingListings 
+  }
 }
 
 export default async function AdminDashboardPage() {
@@ -50,8 +70,88 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-8 animate-fade-in-up">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Admin Overview</h1>
-        <p className="text-gray-500 mt-1">System-wide statistics and pending actions.</p>
+        <h1 className="text-2xl font-bold text-gray-900">Admin Command Center</h1>
+        <p className="text-gray-500 mt-1">Platform overview and critical actions.</p>
+      </div>
+
+      {/* Platform Health Section */}
+      <div className="card bg-gradient-to-r from-green-50 to-emerald-50 border-green-100">
+        <div className="p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center">
+              <ChartLine size={24} weight="fill" className="text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">Platform Health</h2>
+              <p className="text-sm text-gray-600">System performance and metrics</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-green-600">{data.approvalRate}%</p>
+              <p className="text-xs text-gray-600">Approval Rate</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-blue-600">{data.approvedPropertiesCount}</p>
+              <p className="text-xs text-gray-600">Live Listings</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-orange-600">{data.pendingPropertiesCount}</p>
+              <p className="text-xs text-gray-600">Pending Review</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-red-600">{data.reportsCount}</p>
+              <p className="text-xs text-gray-600">Active Reports</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <Link href="/admin/listings" className="card p-4 hover:shadow-md transition-all group">
+          <div className="flex items-center gap-3">
+            <Clock size={20} className="text-orange-500" weight="duotone" />
+            <div>
+              <p className="font-semibold text-gray-900 group-hover:text-green-600">Pending Listings</p>
+              <p className="text-xs text-gray-500">{data.pendingPropertiesCount} to review</p>
+            </div>
+            <ArrowRight size={16} className="text-gray-400 group-hover:text-green-600 ml-auto" />
+          </div>
+        </Link>
+        
+        <Link href="/admin/reports" className="card p-4 hover:shadow-md transition-all group">
+          <div className="flex items-center gap-3">
+            <Flag size={20} className="text-red-500" weight="duotone" />
+            <div>
+              <p className="font-semibold text-gray-900 group-hover:text-green-600">Review Reports</p>
+              <p className="text-xs text-gray-500">{data.reportsCount} active</p>
+            </div>
+            <ArrowRight size={16} className="text-gray-400 group-hover:text-green-600 ml-auto" />
+          </div>
+        </Link>
+        
+        <Link href="/admin/listings?status=APPROVED" className="card p-4 hover:shadow-md transition-all group">
+          <div className="flex items-center gap-3">
+            <CheckCircle size={20} className="text-green-500" weight="duotone" />
+            <div>
+              <p className="font-semibold text-gray-900 group-hover:text-green-600">Live Listings</p>
+              <p className="text-xs text-gray-500">{data.approvedPropertiesCount} active</p>
+            </div>
+            <ArrowRight size={16} className="text-gray-400 group-hover:text-green-600 ml-auto" />
+          </div>
+        </Link>
+        
+        <Link href="/admin/users" className="card p-4 hover:shadow-md transition-all group">
+          <div className="flex items-center gap-3">
+            <UsersThree size={20} className="text-blue-500" weight="duotone" />
+            <div>
+              <p className="font-semibold text-gray-900 group-hover:text-green-600">All Users</p>
+              <p className="text-xs text-gray-500">{data.usersCount} total</p>
+            </div>
+            <ArrowRight size={16} className="text-gray-400 group-hover:text-green-600 ml-auto" />
+          </div>
+        </Link>
       </div>
 
       {/* Stats */}
@@ -70,10 +170,13 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Pending Listings */}
+        {/* Verification Queue */}
         <div className="card">
           <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="font-bold text-gray-900">Pending Listings</h2>
+            <div className="flex items-center gap-2">
+              <ShieldCheck size={18} className="text-orange-500" weight="duotone" />
+              <h2 className="font-bold text-gray-900">Verification Queue</h2>
+            </div>
             <Link href="/admin/listings" className="text-sm font-medium text-[#16a34a] hover:text-[#0d4f2e]">View All</Link>
           </div>
           {data.pendingListings.length > 0 ? (
@@ -89,14 +192,20 @@ export default async function AdminDashboardPage() {
               ))}
             </ul>
           ) : (
-            <div className="p-8 text-center text-gray-500">No pending listings</div>
+            <div className="p-8 text-center text-gray-500">
+              <CheckCircle size={32} className="mx-auto mb-2 text-green-500" weight="duotone" />
+              <p>No listings waiting for review</p>
+            </div>
           )}
         </div>
 
-        {/* Recent Users */}
+        {/* Recent Activity */}
         <div className="card">
           <div className="p-5 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="font-bold text-gray-900">Recent Users</h2>
+            <div className="flex items-center gap-2">
+              <Bell size={18} className="text-blue-500" weight="duotone" />
+              <h2 className="font-bold text-gray-900">Recent Activity</h2>
+            </div>
             <Link href="/admin/users" className="text-sm font-medium text-[#16a34a] hover:text-[#0d4f2e]">View All</Link>
           </div>
           <div className="overflow-x-auto">

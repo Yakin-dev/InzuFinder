@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
-import { CheckCircle, XCircle, Eye, Clock, House } from '@phosphor-icons/react'
+import { CheckCircle, XCircle, Eye, Clock, House, ShieldCheck } from '@phosphor-icons/react'
 
 interface HouseAdmin {
   id: string
@@ -68,6 +68,19 @@ export default function AdminHousesPage() {
       <div>
         <h1 className="text-2xl font-bold text-gray-900">Manage Listings</h1>
         <p className="text-gray-500 mt-1">Review and approve property listings</p>
+      </div>
+
+      {/* Explanation Banner */}
+      <div className="card bg-blue-50 border-blue-200 p-4">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center flex-shrink-0">
+            <ShieldCheck size={16} weight="fill" className="text-white" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-blue-900">Quality Assurance Process</h3>
+            <p className="text-sm text-blue-700 mt-1">Every landlord listing is reviewed before it becomes visible to tenants. This ensures all properties meet our quality and safety standards.</p>
+          </div>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -187,8 +200,28 @@ export default function AdminHousesPage() {
           <div className="w-16 h-16 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <House size={28} weight="duotone" className="text-gray-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">No {filter.toLowerCase()} listings</h3>
-          <p className="text-gray-500">There are no listings with this status right now.</p>
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">
+            {filter === 'PENDING' ? 'No listings waiting for review' : 
+             filter === 'APPROVED' ? 'No live listings' : 
+             'No rejected listings'}
+          </h3>
+          <p className="text-gray-500 mb-6">
+            {filter === 'PENDING' ? 'All listings have been reviewed. Great job keeping the queue clear!' :
+             filter === 'APPROVED' ? 'No approved listings are currently live.' :
+             'No listings have been rejected at this time.'}
+          </p>
+          {filter === 'PENDING' && (
+            <Link href="/admin/listings?status=APPROVED" className="btn-primary inline-flex items-center gap-2">
+              <CheckCircle size={16} />
+              View Live Listings
+            </Link>
+          )}
+          {filter === 'APPROVED' && (
+            <Link href="/admin/listings?status=PENDING" className="btn-primary inline-flex items-center gap-2">
+              <Clock size={16} />
+              Review Pending Listings
+            </Link>
+          )}
         </div>
       )}
     </div>

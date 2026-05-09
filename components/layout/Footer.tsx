@@ -68,11 +68,11 @@ export default function Footer() {
             <h3 className="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Explore</h3>
             <ul className="space-y-2.5">
               {[
-                { label: 'Browse All Houses', href: '/houses' },
-                { label: 'Houses in Gasabo', href: '/houses?district=Gasabo' },
-                { label: 'Houses in Kicukiro', href: '/houses?district=Kicukiro' },
-                { label: 'Houses in Nyarugenge', href: '/houses?district=Nyarugenge' },
-                { label: 'Furnished Houses', href: '/houses?furnished=true' },
+                { label: 'Browse All Listings', href: '/houses' },
+                { label: 'Properties in Gasabo', href: '/houses?district=Gasabo' },
+                { label: 'Properties in Kicukiro', href: '/houses?district=Kicukiro' },
+                { label: 'Properties in Nyarugenge', href: '/houses?district=Nyarugenge' },
+                { label: 'Furnished Properties', href: '/houses?furnished=true' },
               ].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="text-sm text-gray-400 hover:text-[#16a34a] transition-colors">
@@ -88,7 +88,7 @@ export default function Footer() {
             <h3 className="font-semibold text-white mb-4 text-sm uppercase tracking-wider">Platform</h3>
             <ul className="space-y-2.5">
               {[
-                { label: 'List Your House', href: '/register' },
+                { label: 'List Your Property', href: '/register' },
                 { label: 'Landlord Dashboard', href: '/dashboard' },
                 { label: 'Sign Up', href: '/register' },
                 { label: 'Login', href: '/login' },

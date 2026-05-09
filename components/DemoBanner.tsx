@@ -22,7 +22,7 @@ export default function DemoBanner() {
       <div className="container-app flex items-center justify-between gap-3 py-2">
         <div className="flex items-center gap-2 text-sm font-medium">
           <Flag size={18} weight="duotone" />
-          <span>Demo mode: listings are sample data prepared for testing and presentation.</span>
+          <span>Demo mode: This platform uses sample listings for testing and presentation.</span>
         </div>
         <button
           type="button"

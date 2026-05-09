@@ -44,8 +44,6 @@ export default function RegisterContent() {
       toast.success('Account created successfully!')
       if (redirectTo) {
         router.push(redirectTo)
-      } else if (data.user.role === 'ADMIN') {
-        router.push('/dashboard/admin')
       } else if (data.user.role === 'LANDLORD') {
         router.push('/dashboard/landlord')
       } else {

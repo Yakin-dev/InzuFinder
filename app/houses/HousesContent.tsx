@@ -7,7 +7,7 @@ import Footer from '@/components/layout/Footer'
 import HouseCard from '@/components/houses/HouseCard'
 import { HouseCardSkeleton } from '@/components/HouseCardSkeleton'
 import dynamic from 'next/dynamic'
-import { MagnifyingGlass, Funnel, SortAscending, X, MapPin, CaretLeft, CaretRight, SlidersHorizontal, MapTrifold, SquaresFour } from '@phosphor-icons/react'
+import { MagnifyingGlass, Funnel, SortAscending, X, MapPin, CaretLeft, CaretRight, SlidersHorizontal, MapTrifold, SquaresFour, Plus, ChatCircle } from '@phosphor-icons/react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useCompareStore } from '@/hooks/useCompare'
@@ -52,6 +52,7 @@ export default function HousesContent() {
   const [loading, setLoading] = useState(true)
   const [mobileFilters, setMobileFilters] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'map'>('grid')
+  const [requestModalOpen, setRequestModalOpen] = useState(false)
   const { ids: compareIds, clear: clearCompare } = useCompareStore()
 
   const [filters, setFilters] = useState({
@@ -68,6 +69,15 @@ export default function HousesContent() {
     search: searchParams.get('search') || '',
     sort: searchParams.get('sort') || '',
     page: Number(searchParams.get('page') || '1'),
+  })
+
+  const [requestForm, setRequestForm] = useState({
+    propertyType: '',
+    location: '',
+    budget: '',
+    bedrooms: '',
+    phone: '',
+    notes: ''
   })
 
   const fetchHouses = useCallback(async () => {
@@ -124,6 +134,17 @@ export default function HousesContent() {
       page: 1,
     })
     router.push('/houses')
+  }
+
+  const handleRequestSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    // Store in localStorage for demo purposes
+    const requests = JSON.parse(localStorage.getItem('propertyRequests') || '[]')
+    requests.push({ ...requestForm, id: Date.now(), createdAt: new Date().toISOString() })
+    localStorage.setItem('propertyRequests', JSON.stringify(requests))
+    alert('Thank you! Your property request has been submitted. We will contact you soon.')
+    setRequestModalOpen(false)
+    setRequestForm({ propertyType: '', location: '', budget: '', bedrooms: '', phone: '', notes: '' })
   }
 
   const hasActiveFilters =
@@ -283,13 +304,145 @@ export default function HousesContent() {
                   </div>
                   <h3 className="text-xl font-semibold text-gray-700 mb-2">No properties found</h3>
                   <p className="text-gray-500 mb-6">Try adjusting your filters or check back later.</p>
-                  <button onClick={clearFilters} className="btn-primary">Clear Filters</button>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button onClick={clearFilters} className="btn-primary">Clear Filters</button>
+                    <button onClick={() => setRequestModalOpen(true)} className="btn-secondary inline-flex items-center gap-2">
+                      <ChatCircle size={16} />
+                      Request a Property
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
           </div>
         </div>
       </main>
+
+      {/* Request Property Modal */}
+      {requestModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setRequestModalOpen(false)} />
+          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-100">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-gray-900">Request a Property</h2>
+                <button
+                  onClick={() => setRequestModalOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              <p className="text-sm text-gray-600 mt-2">
+                Tell us your budget and preferred location. We'll help match you with suitable properties.
+              </p>
+            </div>
+            <form onSubmit={handleRequestSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="form-label">Property Type</label>
+                <select
+                  value={requestForm.propertyType}
+                  onChange={(e) => setRequestForm({ ...requestForm, propertyType: e.target.value })}
+                  className="form-input"
+                  required
+                >
+                  <option value="">Select type</option>
+                  <option value="APARTMENT">Apartment</option>
+                  <option value="HOUSE">House</option>
+                  <option value="STUDIO">Studio</option>
+                  <option value="ROOM">Room</option>
+                </select>
+              </div>
+              <div>
+                <label className="form-label">Preferred Location</label>
+                <input
+                  type="text"
+                  value={requestForm.location}
+                  onChange={(e) => setRequestForm({ ...requestForm, location: e.target.value })}
+                  placeholder="e.g., Kacyiru, Nyabugogo"
+                  className="form-input"
+                  required
+                />
+              </div>
+              <div>
+                <label className="form-label">Budget (RWF/month)</label>
+                <input
+                  type="number"
+                  value={requestForm.budget}
+                  onChange={(e) => setRequestForm({ ...requestForm, budget: e.target.value })}
+                  placeholder="e.g., 150000"
+                  className="form-input"
+                  required
+                />
+              </div>
+              <div>
+                <label className="form-label">Bedrooms</label>
+                <select
+                  value={requestForm.bedrooms}
+                  onChange={(e) => setRequestForm({ ...requestForm, bedrooms: e.target.value })}
+                  className="form-input"
+                  required
+                >
+                  <option value="">Select bedrooms</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4+</option>
+                </select>
+              </div>
+              <div>
+                <label className="form-label">Phone/WhatsApp</label>
+                <input
+                  type="tel"
+                  value={requestForm.phone}
+                  onChange={(e) => setRequestForm({ ...requestForm, phone: e.target.value })}
+                  placeholder="e.g., 0788123456"
+                  className="form-input"
+                  required
+                />
+              </div>
+              <div>
+                <label className="form-label">Additional Notes</label>
+                <textarea
+                  value={requestForm.notes}
+                  onChange={(e) => setRequestForm({ ...requestForm, notes: e.target.value })}
+                  placeholder="Any specific requirements..."
+                  rows={3}
+                  className="form-input resize-none"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setRequestModalOpen(false)}
+                  className="btn-secondary flex-1"
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-primary flex-1">
+                  Submit Request
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Request Property CTA Card */}
+      <div className="fixed bottom-4 right-4 z-40">
+        <button
+          onClick={() => setRequestModalOpen(true)}
+          className="card bg-gradient-to-r from-green-600 to-emerald-600 text-white p-4 shadow-lg hover:shadow-xl transition-all group"
+        >
+          <div className="flex items-center gap-3">
+            <ChatCircle size={20} weight="fill" />
+            <div className="text-left">
+              <p className="font-semibold text-sm">Can't find what you want?</p>
+              <p className="text-xs opacity-90">Request a property</p>
+            </div>
+          </div>
+        </button>
+      </div>
       {compareIds.length >= 2 && (
         <div className="fixed bottom-4 left-0 right-0 z-[80] flex justify-center px-4">
           <div className="w-full max-w-2xl bg-[#0d4f2e] text-white rounded-2xl shadow-2xl px-4 py-3 flex items-center justify-between gap-3">

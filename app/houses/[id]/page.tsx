@@ -14,7 +14,7 @@ import { getServerSession } from '@/lib/auth'
 import type { Metadata } from 'next'
 import {
   Bed, Bathtub, House as HouseIcon, Armchair, MapPin, ShieldCheck, CaretRight,
-  Buildings, Ruler
+  Buildings, Ruler, CheckCircle
 } from '@phosphor-icons/react/dist/ssr'
 
 // Dynamic SEO metadata
@@ -295,6 +295,36 @@ export default async function HouseDetailPage({ params }: { params: { id: string
                     <Link href="/login" className="btn-secondary w-full py-2">Sign In</Link>
                   </div>
                 )}
+              </div>
+
+              {/* Trust & Verification Card */}
+              <div className="card bg-gradient-to-br from-green-50 to-emerald-50 border-green-100 p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <ShieldCheck size={20} weight="fill" className="text-green-600" />
+                  <h3 className="font-bold text-gray-900">Verified by InzuFinder</h3>
+                </div>
+                <div className="space-y-3 mb-4">
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle size={16} weight="fill" className="text-green-500" />
+                    <span className="text-gray-700">Photos reviewed and approved</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle size={16} weight="fill" className="text-green-500" />
+                    <span className="text-gray-700">Landlord contact verified</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle size={16} weight="fill" className="text-green-500" />
+                    <span className="text-gray-700">Pricing reviewed for accuracy</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <CheckCircle size={16} weight="fill" className="text-green-500" />
+                    <span className="text-gray-700">Report button available</span>
+                  </div>
+                </div>
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                  <p className="text-xs text-amber-800 font-medium mb-1">⚠️ Safety Reminder</p>
+                  <p className="text-xs text-amber-700">Never pay before visiting or confirming the property.</p>
+                </div>
               </div>
 
               <HouseDetailQuickActions houseId={house.id} houseTitle={house.title} />
