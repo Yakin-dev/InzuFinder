@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { motion, Variants, AnimatePresence } from 'framer-motion';
-import { Star, SpeakerHigh, SpeakerSlash, ArrowDown, ShieldCheck } from '@phosphor-icons/react';
+import { Star, ArrowDown, ShieldCheck } from '@phosphor-icons/react';
 
 interface Testimonial {
   image: string;
@@ -19,21 +19,6 @@ interface Props {
   testimonials: Testimonial[];
 }
 
-const generateWaveVariants = (): Variants[] =>
-  Array.from({ length: 20 }, () => ({
-    initial: { scaleY: 0.4 },
-    animate: {
-      scaleY: [0.4, Math.random() * 1.4 + 0.6, 0.4],
-      transition: {
-        duration: Math.random() * 0.6 + 0.4,
-        repeat: Infinity,
-        ease: 'easeInOut',
-        delay: Math.random() * 0.4,
-      },
-    },
-  }));
-
-const waveVariants = generateWaveVariants();
 
 const containerVariants = {
   hidden: {},
@@ -50,47 +35,8 @@ const cardVariants: Variants = {
 };
 
 export const InzuTestimonials: React.FC<Props> = ({ testimonials }) => {
-  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
   const [showAll, setShowAll] = useState(false);
   const [imgErrors, setImgErrors] = useState<Record<number, boolean>>({});
-
-  const speakEnglish = (text: string, index: number) => {
-    if (typeof window === 'undefined') return;
-    window.speechSynthesis.cancel();
-
-    if (playingIndex === index) {
-      setPlayingIndex(null);
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-
-    // Use best English voice available
-    const voice =
-      voices.find((v) => v.lang === 'en-GB') ||
-      voices.find((v) => v.lang === 'en-US') ||
-      voices.find((v) => v.lang.startsWith('en'));
-
-    if (voice) utterance.voice = voice;
-    utterance.rate = 0.88;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-
-    utterance.onstart = () => setPlayingIndex(index);
-    utterance.onend = () => setPlayingIndex(null);
-    utterance.onerror = () => setPlayingIndex(null);
-
-    window.speechSynthesis.speak(utterance);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (typeof window !== 'undefined') {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
 
   const visible = showAll ? testimonials : testimonials.slice(0, 6);
 
@@ -195,41 +141,13 @@ export const InzuTestimonials: React.FC<Props> = ({ testimonials }) => {
               {/* Testimonial Text (English) */}
               <p className="text-gray-700 mb-4 leading-relaxed">"{t.text}"</p>
 
-              {/* Verified Label */}
-              <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
-                <ShieldCheck size={14} weight="fill" className="text-[#16a34a]" />
-                <span>Verified InzuFinder User</span>
-              </div>
-
-              {/* English Audio Player */}
-              <button
-                onClick={() => speakEnglish(t.text, index)}
-                className="flex items-center gap-2 text-[#0d4f2e] flex-shrink-0"
-              >
-                {playingIndex === index ? (
-                  <SpeakerSlash size={20} weight="fill" />
-                ) : (
-                  <SpeakerHigh size={20} weight="fill" />
-                )}
-                <span className="text-sm font-medium">
-                  {playingIndex === index ? 'Stop' : 'Listen'}
+              {/* Verified Footer */}
+              <div className="flex items-center gap-1 border-t border-gray-100 pt-3 mt-1">
+                <ShieldCheck weight="fill" className="text-[#16a34a]" size={14} />
+                <span className="text-xs text-[#16a34a] font-medium">
+                  Verified InzuFinder User
                 </span>
-              </button>
-
-              {/* Animated Waveform */}
-              {playingIndex === index && (
-                <div className="flex items-center gap-1 mt-3 h-8">
-                  {waveVariants.map((variant, i) => (
-                    <motion.div
-                      key={i}
-                      variants={variant}
-                      initial="initial"
-                      animate="animate"
-                      className="w-1 bg-[#16a34a] rounded-full"
-                    />
-                  ))}
-                </div>
-              )}
+              </div>
             </motion.div>
           ))}
         </motion.div>
