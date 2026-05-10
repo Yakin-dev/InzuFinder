@@ -12,6 +12,7 @@ import { House, ShieldCheck, Lightning, Users, Heart, MapPin, MagnifyingGlass, B
 import { InzuTestimonials } from '@/components/ui/InzuTestimonials'
 import HowItWorks from '@/components/home/HowItWorks'
 import WhyChooseInzu from '@/components/home/WhyChooseInzu'
+import CTABanner from '@/components/home/CTABanner'
 
 async function getFeaturedHouses() {
   return prisma.house.findMany({
@@ -199,36 +200,7 @@ export default async function HomePage() {
 
         <InzuTestimonials testimonials={TESTIMONIALS} />
 
-        {/* CTA Section */}
-        <section className="section">
-          <div className="container-app">
-            <div className="hero-gradient rounded-3xl p-10 md:p-16 text-center text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 rounded-full border-2 border-white/10 translate-x-16 -translate-y-16" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full border border-white/5 -translate-x-12 translate-y-12" />
-              <div className="relative z-10">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">Have a Property to Rent?</h2>
-                <p className="text-green-200 mb-8 max-w-lg mx-auto">
-                  List your house on InzuFinder and connect with verified tenants across Kigali. Setup takes less than 5 minutes.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Link
-                    href="/register?role=LANDLORD"
-                    className="bg-white text-[#0d4f2e] font-semibold px-8 py-3 rounded-xl hover:bg-green-50 transition-all duration-200 inline-flex items-center justify-center gap-2 hover:scale-[1.02]"
-                  >
-                    <House size={18} weight="fill" />
-                    List My House
-                  </Link>
-                  <Link
-                    href="/houses"
-                    className="border border-white/30 text-white font-semibold px-8 py-3 rounded-xl hover:bg-white/10 transition-all duration-200 inline-flex items-center justify-center gap-2"
-                  >
-                    Browse First
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <CTABanner />
       </main>
       <Footer />
     </>
