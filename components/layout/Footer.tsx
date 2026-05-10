@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import {
   Home,
@@ -69,7 +71,6 @@ export default function Footer() {
               >
                 {stat.label}
               </span>
-              {/* Divider on desktop */}
               {i < 3 && (
                 <div
                   className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 h-10 w-px"
