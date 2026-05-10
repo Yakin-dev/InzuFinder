@@ -46,7 +46,7 @@ async function getStats() {
 
 const TESTIMONIALS = [
   {
-    image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=200&h=200&fit=crop&crop=face',
+    image: '/testimonials/rwandan-1.png',
     name: 'Amina Uwimana',
     role: 'Teacher',
     location: 'Gasabo',
@@ -55,7 +55,7 @@ const TESTIMONIALS = [
     type: 'tenant' as const,
   },
   {
-    image: 'https://images.unsplash.com/photo-1507003211169-0a6dd7228f2d?w=200&h=200&fit=crop&crop=face',
+    image: '/testimonials/rwandan-2.png',
     name: 'Jean-Paul Mugisha',
     role: 'Property Owner',
     location: 'Kicukiro',
@@ -64,7 +64,7 @@ const TESTIMONIALS = [
     type: 'landlord' as const,
   },
   {
-    image: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face',
+    image: '/testimonials/rwandan-3.png',
     name: 'Claudine Umubyeyi',
     role: 'Business Owner',
     location: 'Nyarugenge',
@@ -73,7 +73,7 @@ const TESTIMONIALS = [
     type: 'tenant' as const,
   },
   {
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face',
+    image: '/testimonials/rwandan-4.png',
     name: 'Eric Nkurunziza',
     role: 'Software Engineer',
     location: 'Gasabo',
@@ -82,7 +82,7 @@ const TESTIMONIALS = [
     type: 'tenant' as const,
   },
   {
-    image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=face',
+    image: '/testimonials/rwandan-5.png',
     name: 'Marie Claire Ingabire',
     role: 'Nurse',
     location: 'Kicukiro',
@@ -91,7 +91,7 @@ const TESTIMONIALS = [
     type: 'tenant' as const,
   },
   {
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face',
+    image: '/testimonials/rwandan-6.png',
     name: 'Patrick Habimana',
     role: 'Landlord and Investor',
     location: 'Gasabo',

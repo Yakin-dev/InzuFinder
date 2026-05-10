@@ -183,7 +183,13 @@ export default function Header() {
             ) : (
               <>
                 <Link href="/login" className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors">Login</Link>
-                <Link href="/register" className="px-4 py-2 rounded-lg text-sm font-medium bg-[#0d4f2e] text-white hover:bg-[#0a3d1f] transition-colors">List Your House</Link>
+                <Link
+                  href="/register"
+                  className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full text-sm font-semibold bg-gradient-to-r from-[#0d4f2e] to-[#16a34a] text-white hover:from-[#0a3d1f] hover:to-[#0ea54e] transition-all duration-200 hover:-translate-y-[1px] hover:shadow-lg"
+                  style={{ boxShadow: '0 2px 12px rgba(13,79,46,0.25)' }}
+                >
+                  List Your House
+                </Link>
               </>
             )}
           </div>
