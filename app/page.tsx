@@ -5,14 +5,13 @@ import { prisma } from '@/lib/prisma'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import HouseCard from '@/components/houses/HouseCard'
-import HomeClient from '@/components/home/HomeClient'
 import HomeHero from '@/components/home/HomeHero'
-import ScrollReveal from '@/components/ScrollReveal'
-import { House, ShieldCheck, Lightning, Users, Heart, MapPin, MagnifyingGlass, Bed } from '@phosphor-icons/react/dist/ssr'
+import { House } from '@phosphor-icons/react/dist/ssr'
 import { InzuTestimonials } from '@/components/ui/InzuTestimonials'
 import HowItWorks from '@/components/home/HowItWorks'
 import WhyChooseInzu from '@/components/home/WhyChooseInzu'
 import CTABanner from '@/components/home/CTABanner'
+import StatsAndNeighborhoods from '@/components/home/StatsAndNeighborhoods'
 
 async function getFeaturedHouses() {
   return prisma.house.findMany({
@@ -103,22 +102,16 @@ const TESTIMONIALS = [
 ]
 
 export default async function HomePage() {
-  const [featured, stats] = await Promise.all([getFeaturedHouses(), getStats()])
+  const featured = await getFeaturedHouses()
 
   return (
     <>
       <Header />
       <main>
-        <div className="bg-[#0d4f2e] text-white py-2 overflow-hidden">
-          <div className="marquee whitespace-nowrap">
-            <span className="mx-4">✓ Admin Verified Listings • ✓ No Fake Posts • ✓ Kigali&apos;s #1 Rental Platform • ✓ 100% Free to Browse • ✓ RDB Registered Business •</span>
-            <span className="mx-4">✓ Admin Verified Listings • ✓ No Fake Posts • ✓ Kigali&apos;s #1 Rental Platform • ✓ 100% Free to Browse • ✓ RDB Registered Business •</span>
-          </div>
-        </div>
-        <section className="relative min-h-[620px] flex items-end overflow-hidden">
+        <section className="relative min-h-[600px] md:min-h-[680px] flex items-end overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1600"
-            alt="Modern home in Kigali"
+            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600"
+            alt="Modern luxury home in Kigali"
             fill
             className="object-cover"
             priority
@@ -130,28 +123,7 @@ export default async function HomePage() {
           <HomeHero />
         </section>
 
-        <ScrollReveal><HomeClient stats={stats} /></ScrollReveal>
-
-        <ScrollReveal className="section bg-white">
-          <div className="container-app">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-2 text-center">Explore by Neighborhood</h2>
-            <p className="text-gray-600 text-center mb-10">Find your perfect home in Kigali&apos;s most popular areas</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { district: 'Gasabo', places: 'Kacyiru • Kimihurura • Remera • Gisozi', badge: 'Most Popular', gradient: 'from-[#0d4f2e] to-[#166534]' },
-                { district: 'Kicukiro', places: 'Niboye • Gikondo • Kagarama • Kanombe', gradient: 'from-[#16a34a] to-[#0d4f2e]' },
-                { district: 'Nyarugenge', places: 'CBD • Nyamirambo • Muhima • Gitega', gradient: 'from-[#14532d] to-[#0d4f2e]' },
-              ].map((item) => (
-                <Link key={item.district} href={`/houses?district=${item.district}`} className={`h-48 rounded-2xl p-6 text-white bg-gradient-to-br ${item.gradient} transition-transform hover:scale-105`}>
-                  <MapPin size={28} weight="duotone" />
-                  <h3 className="text-2xl font-bold tracking-tight mt-4">{item.district} District</h3>
-                  <p className="text-green-100 text-sm mt-2">{item.places}</p>
-                  {item.badge && <span className="mt-4 inline-block px-3 py-1 rounded-full bg-white/20 text-xs">{item.badge}</span>}
-                </Link>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
+        <StatsAndNeighborhoods />
 
         <section className="section">
           <div className="container-app">
