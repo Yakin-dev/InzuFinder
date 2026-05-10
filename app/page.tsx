@@ -11,6 +11,7 @@ import ScrollReveal from '@/components/ScrollReveal'
 import { House, ShieldCheck, Lightning, Users, Heart, MapPin, MagnifyingGlass, Bed } from '@phosphor-icons/react/dist/ssr'
 import { InzuTestimonials } from '@/components/ui/InzuTestimonials'
 import HowItWorks from '@/components/home/HowItWorks'
+import WhyChooseInzu from '@/components/home/WhyChooseInzu'
 
 async function getFeaturedHouses() {
   return prisma.house.findMany({
@@ -194,25 +195,7 @@ export default async function HomePage() {
 
         <HowItWorks />
 
-        <ScrollReveal className="section">
-          <div className="container-app">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 text-center mb-10">Why Choose InzuFinder?</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { icon: <ShieldCheck size={26} weight="duotone" className="text-[#0d4f2e]" />, title: 'Zero Fake Listings', desc: 'Every property manually reviewed' },
-                { icon: <Lightning size={26} weight="duotone" className="text-[#0d4f2e]" />, title: 'Find in Minutes', desc: 'Advanced filters save your time' },
-                { icon: <Users size={26} weight="duotone" className="text-[#0d4f2e]" />, title: 'Verified Landlords', desc: 'All landlords ID-verified' },
-                { icon: <Heart size={26} weight="duotone" className="text-[#0d4f2e]" />, title: 'Rwanda First', desc: 'Built specifically for Kigali renters' },
-              ].map((feature) => (
-                <div key={feature.title} className="rounded-2xl border border-green-100 bg-white p-6 hover:bg-[#f0fdf4] transition-all">
-                  <div className="w-12 h-12 bg-[#f0fdf4] rounded-2xl flex items-center justify-center mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold tracking-tight text-gray-900">{feature.title}</h3>
-                  <p className="text-gray-600 mt-2">{feature.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
+        <WhyChooseInzu />
 
         <InzuTestimonials testimonials={TESTIMONIALS} />
 
