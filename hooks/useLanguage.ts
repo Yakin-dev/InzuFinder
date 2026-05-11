@@ -9,25 +9,24 @@ export function useLanguage() {
   const pathname = usePathname()
 
   const setLanguage = (newLocale: 'en' | 'rw') => {
-    // Remove the current locale from pathname if it exists
+    // Get pathname without locale prefix
     const segments = pathname.split('/')
-    const hasLocale = ['en', 'rw'].includes(segments[1])
-    
-    let newPath: string
-    if (hasLocale) {
-      // Replace the current locale
-      segments[1] = newLocale
-      newPath = segments.join('/')
-    } else {
-      // Add the new locale (for non-default locale)
-      newPath = `/${newLocale}${pathname}`
+    let pathWithoutLocale = pathname
+
+    // Remove locale prefix if present
+    if (['en', 'rw'].includes(segments[1])) {
+      pathWithoutLocale = '/' + segments.slice(2).join('/')
     }
-    
+
+    // Build new path based on locale
+    // With 'as-needed' prefix, English has no prefix, Kinyarwanda has prefix
+    const newPath = newLocale === 'en' ? pathWithoutLocale : `/${newLocale}${pathWithoutLocale}`
+
     router.push(newPath)
   }
 
-  return { 
-    lang: locale.toUpperCase() as 'EN' | 'RW', 
-    setLanguage 
+  return {
+    lang: locale.toUpperCase() as 'EN' | 'RW',
+    setLanguage
   }
 }
