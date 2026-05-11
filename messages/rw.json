@@ -1,0 +1,207 @@
+{
+  "nav": {
+    "browse": "Reba Inzu",
+    "login": "Injira",
+    "listHouse": "Tangaza Inzu Yawe",
+    "gasabo": "Gasabo",
+    "kicukiro": "Kicukiro",
+    "nyarugenge": "Nyarugenge"
+  },
+  "hero": {
+    "trusted": "Urubuga Rwizewe Cyane i Kigali",
+    "headline1": "Shaka Inzu Ikunanira",
+    "headline2": "i Kigali",
+    "subtext": "Inzu zose zasuzumwe. Nta makuru y'ibinyoma. Buri nzu isuzumwa n'itsinda ryacu.",
+    "searchPlaceholder": "duka ifunzwe hafi ya Kimironko munsi ya 300,000...",
+    "searchButton": "Shakisha",
+    "filters": {
+      "city": "Umujyi",
+      "house": "Inzu",
+      "apartment": "Apatiman",
+      "residential": "Aho Gutura",
+      "furnished": "Ifite Imbaho",
+      "studio": "Studio"
+    }
+  },
+  "stats": {
+    "activeListings": "Inzu Zitangazwa",
+    "happyTenants": "Abakodesha Bashimye",
+    "districts": "Turatura mu Turere",
+    "verified": "Zasuzumwe"
+  },
+  "neighborhoods": {
+    "title": "Reba Inzu mu Turere",
+    "subtitle": "Shaka inzu mu turere tumenyerewe cyane i Kigali",
+    "gasabo": {
+      "name": "Akarere ka Gasabo",
+      "areas": "Kacyiru • Kimihurura • Remera • Gisozi",
+      "tag": "Ahantu Hatorwa Cyane"
+    },
+    "kicukiro": {
+      "name": "Akarere ka Kicukiro",
+      "areas": "Niboye • Gikondo • Kagarama • Kanombe"
+    },
+    "nyarugenge": {
+      "name": "Akarere ka Nyarugenge",
+      "areas": "CBD • Nyamirambo • Muhima • Gitega"
+    }
+  },
+  "listings": {
+    "title": "Inzu Nshya Zasuzumwe",
+    "subtitle": "Itangazo ryose risuzumwa kandi ryemezwa n'itsinda ryacu",
+    "featured": "Itangazo Rihishe",
+    "verified": "Yasuzumwe",
+    "beds": "ibiturere",
+    "baths": "imyuzure",
+    "viewDetails": "Reba Ibisobanuro",
+    "compare": "Geranya",
+    "viewAll": "Reba Inzu Zose",
+    "perMonth": "/ukwezi",
+    "rwf": "RWF"
+  },
+  "howItWorks": {
+    "label": "Uko Bikorwa",
+    "title": "Byoroheje, Birizewe, Nta Nshuro",
+    "step1": {
+      "label": "Intambwe ya 01",
+      "title": "Reba Inzu",
+      "desc": "Shakisha inzu zasuzumwe mu turere twose tw'i Kigali. Shungura igiciro, ubwoko, n'ahantu."
+    },
+    "step2": {
+      "label": "Intambwe ya 02",
+      "title": "Isuzuma ry'Ubutegetsi",
+      "desc": "Itangazo ryose risuzumwa n'itsinda ryacu mbere yo gutangazwa. Nta makuru y'ibinyoma, na rimwe."
+    },
+    "step3": {
+      "label": "Intambwe ya 03",
+      "title": "Ohereza Icyifuzo",
+      "desc": "Wabonye inzu yawe? Ohereza icyifuzo cyo gutura unyuze mu rubuga rwacu ugeze ku nyir'inzu."
+    }
+  },
+  "whyUs": {
+    "title": "Kubera Iki Wahitamo InzuFinder?",
+    "feature1": {
+      "title": "Nta Makuru y'Ibinyoma",
+      "desc": "Inzu yose isuzumwa nawe umwe"
+    },
+    "feature2": {
+      "title": "Bona mu Minota mike",
+      "desc": "Gushungura byihuse bigukiza igihe"
+    },
+    "feature3": {
+      "title": "Nyir'inzu Bemewe",
+      "desc": "Nyir'inzu bose basuzumwe indangamuntu"
+    },
+    "feature4": {
+      "title": "Rwanda Nibwo Bwabo",
+      "desc": "Yakozwe cyane cyane kubakodesha b'i Kigali"
+    }
+  },
+  "testimonials": {
+    "title": "Inkuru Zo Mu Buzima",
+    "subtitle": "Abakodesha b'i Kigali Bavuga Iki",
+    "desc": "Ibitekerezo by'ukuri by'abakodesha n'abanyir'inzu mu Gasabo, Kicukiro, na Nyarugenge.",
+    "verified": "Umukoresha wa InzuFinder Wemejwe",
+    "tenant": "Mukodesha",
+    "landlord": "Nyir'inzu"
+  },
+  "cta": {
+    "title": "Ufite Inzu Yo Gukoderisha?",
+    "subtitle": "Tangaza inzu yawe kuri InzuFinder uhuze n'abakodesha bemewe mu Kigali yose. Gutangaza bisaba munsi y'iminota 5.",
+    "listButton": "Tangaza Inzu Yanjye",
+    "browseButton": "Reba Mbere",
+    "badge1": "Yemejwe n'Ubutegetsi",
+    "badge2": "Kwemezwa Vuba",
+    "badge3": "Abakodesha Bemewe",
+    "stat1": "Abakodesha",
+    "stat2": "Inzu Zasuzumwe",
+    "stat3": "Turere Turasuzuma"
+  },
+  "footer": {
+    "tagline": "Urubuga rwizewe cyane rwo gukodesha i Rwanda. Itangazo ryose risuzumwa kandi ryemezwa n'itsinda ryacu mbere yo gutangazwa.",
+    "explore": "Reba",
+    "platform": "Serivisi",
+    "findUs": "Tubone Hehe",
+    "browseAll": "Reba Inzu Zose",
+    "gasabo": "Inzu za Gasabo",
+    "kicukiro": "Inzu za Kicukiro",
+    "nyarugenge": "Inzu za Nyarugenge",
+    "furnished": "Inzu Zifite Imbaho",
+    "listProperty": "Tangaza Inzu Yawe",
+    "dashboard": "Ikibaho cy'Umunyir'inzu",
+    "signup": "Iyandikishe",
+    "login": "Injira",
+    "newsletterLabel": "Bona amakuru y'inzu z'i Kigali",
+    "newsletterPlaceholder": "imeyili@yawe.com",
+    "notifyMe": "Menyesha",
+    "serving": "Turatura mu turere:",
+    "rdb": "Iyandikishwa rya RDB",
+    "builtIn": "Yakozwe i Rwanda 🇷🇼",
+    "copyright": "© 2026 InzuFinder. Yakozwe i Rwanda 🇷🇼",
+    "privacy": "Ibijyanye n'ubunzi",
+    "terms": "Amategeko y'Ikoreshwa",
+    "contact": "Twandikire",
+    "inzuMeans": "Inzu bivuze \"Inzu\" mu Kinyarwanda",
+    "adminVerified": "Inzu Zasuzumwe n'Ubutegetsi",
+    "fraudProtection": "Kurengera Ibyaha"
+  },
+  "listing": {
+    "bedrooms": "Ibiturere",
+    "bathrooms": "Imyuzure",
+    "type": "Ubwoko",
+    "furnished": "Ifite Imbaho",
+    "yes": "Yego",
+    "no": "Oya",
+    "description": "Ibisobanuro",
+    "listedBy": "Itangazwa na",
+    "joined": "Yiyandikishye",
+    "noReviews": "Nta bitekerezo bishyizweho",
+    "signInContact": "Injira kugira ngo ubone imyirondoro y'umunyir'inzu",
+    "signIn": "Injira",
+    "verifiedBy": "Yasuzumwe na InzuFinder",
+    "photosReviewed": "Amashusho yasuzumwe kandi yemezwa",
+    "contactVerified": "Imyirondoro y'umunyir'inzu yasuzumwe",
+    "pricingReviewed": "Igiciro cyasuzumwemo ku byo",
+    "reportAvailable": "Buto ryo gutangaza rikaba",
+    "safetyReminder": "Ugira ngo utishyura mbere yo gusura cyangwa ukemeza inzu.",
+    "requestBooking": "Saba Icyifuzo cyo Gutura",
+    "signInTenant": "Ugomba kuba winjiye nk'umukodesha kugira ngo ubehe icyifuzo cyo gutura.",
+    "createAccount": "Yandiikishe Nka Mukodesha",
+    "similar": "Inzu Zifitanye isano",
+    "save": "Kubika",
+    "report": "Tangaza",
+    "share": "Gusangiza",
+    "perMonth": "Igiciro / Ukwezi"
+  },
+  "auth": {
+    "login": "Injira",
+    "signup": "Iyandikishe",
+    "email": "Imeli",
+    "password": "Ijambo ry'ibanga",
+    "forgotPassword": "Wibagirwe ijambo ry'ibanga?",
+    "noAccount": "Nta konti ufite?",
+    "hasAccount": "Ufite konti?",
+    "loginButton": "Injira",
+    "signupButton": "Yandiikishe Konti",
+    "role": {
+      "tenant": "Nshaka inzu",
+      "landlord": "Nshaka gutangaza inzu yanjye"
+    }
+  },
+  "search": {
+    "lookingFor": "Shaka",
+    "enterType": "Injiza ubwoko",
+    "price": "Igiciro",
+    "locations": "Imyaka",
+    "tourName": "Izina ry'ikiyaga",
+    "numberOfRooms": "Umubare w'ibyumba",
+    "bedRooms": "Ibiturere",
+    "searchButton": "Shakisha",
+    "noResults": "Nta mpapuro ziboneka zihuye n'ishakisha ryawe.",
+    "tryAgain": "Gerageza izindi filtration.",
+    "allDistricts": "Turere Twose",
+    "anyPrice": "Igiciro Icyo aricyo cyose",
+    "anyRooms": "Ibyumba Icyo aricyo cyose",
+    "anyType": "Ubwoko Icyo aricyo cyose"
+  }
+}

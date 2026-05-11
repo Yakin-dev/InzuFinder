@@ -1,18 +1,18 @@
 'use client'
 
 import { useLanguage } from '@/hooks/useLanguage'
-import { Globe } from '@phosphor-icons/react'
+import { Globe } from 'lucide-react'
 
 export function LanguageToggle() {
   const { lang, setLanguage } = useLanguage()
 
   return (
     <div className="flex items-center gap-2">
-      <Globe size={18} weight="duotone" className="text-gray-500" />
+      <Globe size={18} className="text-gray-500" />
       <div className="inline-flex rounded-xl overflow-hidden border border-gray-200 bg-white/70">
         <button
           type="button"
-          onClick={() => setLanguage('EN')}
+          onClick={() => setLanguage('en')}
           className={`px-3 py-1.5 text-sm font-semibold transition-colors ${
             lang === 'EN' ? 'bg-[#0d4f2e] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
           }`}
@@ -22,7 +22,7 @@ export function LanguageToggle() {
         </button>
         <button
           type="button"
-          onClick={() => setLanguage('RW')}
+          onClick={() => setLanguage('rw')}
           className={`px-3 py-1.5 text-sm font-semibold transition-colors ${
             lang === 'RW' ? 'bg-[#0d4f2e] text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
           }`}
@@ -34,4 +34,3 @@ export function LanguageToggle() {
     </div>
   )
 }
-

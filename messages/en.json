@@ -1,0 +1,207 @@
+{
+  "nav": {
+    "browse": "Browse Houses",
+    "login": "Login",
+    "listHouse": "List Your House",
+    "gasabo": "Gasabo",
+    "kicukiro": "Kicukiro",
+    "nyarugenge": "Nyarugenge"
+  },
+  "hero": {
+    "trusted": "Kigali's Most Trusted Rental Platform",
+    "headline1": "Find Your Perfect",
+    "headline2": "Home in Kigali",
+    "subtext": "Verified listings only. No fake posts. Every home reviewed by our team.",
+    "searchPlaceholder": "furnished shop near Kimironko under 300,000...",
+    "searchButton": "Search",
+    "filters": {
+      "city": "City",
+      "house": "House",
+      "apartment": "Apartment",
+      "residential": "Residential",
+      "furnished": "Furnished",
+      "studio": "Studio"
+    }
+  },
+  "stats": {
+    "activeListings": "Active Listings",
+    "happyTenants": "Happy Tenants",
+    "districts": "Districts Covered",
+    "verified": "Verified"
+  },
+  "neighborhoods": {
+    "title": "Explore by Neighborhood",
+    "subtitle": "Find your perfect home in Kigali's most popular areas",
+    "gasabo": {
+      "name": "Gasabo District",
+      "areas": "Kacyiru • Kimihurura • Remera • Gisozi",
+      "tag": "Most Popular"
+    },
+    "kicukiro": {
+      "name": "Kicukiro District",
+      "areas": "Niboye • Gikondo • Kagarama • Kanombe"
+    },
+    "nyarugenge": {
+      "name": "Nyarugenge District",
+      "areas": "CBD • Nyamirambo • Muhima • Gitega"
+    }
+  },
+  "listings": {
+    "title": "Latest Verified Properties",
+    "subtitle": "All listings reviewed and approved by our team",
+    "featured": "Featured",
+    "verified": "Verified",
+    "beds": "beds",
+    "baths": "baths",
+    "viewDetails": "View Details",
+    "compare": "Compare",
+    "viewAll": "View All Properties",
+    "perMonth": "/mo",
+    "rwf": "RWF"
+  },
+  "howItWorks": {
+    "label": "How It Works",
+    "title": "Simple, Safe, Trusted",
+    "step1": {
+      "label": "Step 01",
+      "title": "Browse Listings",
+      "desc": "Search verified properties across all Kigali districts. Filter by price, type, and location."
+    },
+    "step2": {
+      "label": "Step 02",
+      "title": "Admin Verified",
+      "desc": "Every listing is reviewed by our team before going live. No fake listings, ever."
+    },
+    "step3": {
+      "label": "Step 03",
+      "title": "Send a Request",
+      "desc": "Found your home? Send a booking request directly to the landlord through our platform."
+    }
+  },
+  "whyUs": {
+    "title": "Why Choose InzuFinder?",
+    "feature1": {
+      "title": "Zero Fake Listings",
+      "desc": "Every property manually reviewed"
+    },
+    "feature2": {
+      "title": "Find in Minutes",
+      "desc": "Advanced filters save your time"
+    },
+    "feature3": {
+      "title": "Verified Landlords",
+      "desc": "All landlords ID-verified"
+    },
+    "feature4": {
+      "title": "Rwanda First",
+      "desc": "Built specifically for Kigali renters"
+    }
+  },
+  "testimonials": {
+    "title": "Real Stories",
+    "subtitle": "What Kigali Renters Say",
+    "desc": "Verified reviews from tenants and landlords across Gasabo, Kicukiro, and Nyarugenge.",
+    "verified": "Verified InzuFinder User",
+    "tenant": "Tenant",
+    "landlord": "Landlord"
+  },
+  "cta": {
+    "title": "Have a Property to Rent?",
+    "subtitle": "List your house on InzuFinder and connect with verified tenants across Kigali. Setup takes less than 5 minutes.",
+    "listButton": "List My House",
+    "browseButton": "Browse First",
+    "badge1": "Admin Verified",
+    "badge2": "Fast Approval",
+    "badge3": "Qualified Tenants",
+    "stat1": "Renters",
+    "stat2": "Verified Listings",
+    "stat3": "Districts Covered"
+  },
+  "footer": {
+    "tagline": "Rwanda's most trusted rental platform. Every listing is reviewed and approved by our team before going live.",
+    "explore": "Explore",
+    "platform": "Platform",
+    "findUs": "Find Us",
+    "browseAll": "Browse All Listings",
+    "gasabo": "Properties in Gasabo",
+    "kicukiro": "Properties in Kicukiro",
+    "nyarugenge": "Properties in Nyarugenge",
+    "furnished": "Furnished Properties",
+    "listProperty": "List Your Property",
+    "dashboard": "Landlord Dashboard",
+    "signup": "Sign Up",
+    "login": "Login",
+    "newsletterLabel": "Get Kigali rental alerts",
+    "newsletterPlaceholder": "your@email.com",
+    "notifyMe": "Notify Me",
+    "serving": "Serving all districts:",
+    "rdb": "RDB Registered Business",
+    "builtIn": "Built in Rwanda 🇷🇼",
+    "copyright": "© 2026 InzuFinder. Built in Rwanda 🇷🇼",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "contact": "Contact",
+    "inzuMeans": "Inzu means \"House\" in Kinyarwanda",
+    "adminVerified": "Admin-Verified Listings",
+    "fraudProtection": "Fraud Protection"
+  },
+  "listing": {
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "type": "Type",
+    "furnished": "Furnished",
+    "yes": "Yes",
+    "no": "No",
+    "description": "Description",
+    "listedBy": "Listed By",
+    "joined": "Joined",
+    "noReviews": "No reviews yet",
+    "signInContact": "Sign in to view landlord contact details",
+    "signIn": "Sign In",
+    "verifiedBy": "Verified by InzuFinder",
+    "photosReviewed": "Photos reviewed and approved",
+    "contactVerified": "Landlord contact verified",
+    "pricingReviewed": "Pricing reviewed for accuracy",
+    "reportAvailable": "Report button available",
+    "safetyReminder": "Never pay before visiting or confirming the property.",
+    "requestBooking": "Request to Book",
+    "signInTenant": "You need to be signed in as a tenant to send a booking request.",
+    "createAccount": "Create Tenant Account",
+    "similar": "Similar Properties",
+    "save": "Save",
+    "report": "Report",
+    "share": "Share",
+    "perMonth": "Price / Month"
+  },
+  "auth": {
+    "login": "Login",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "loginButton": "Sign In",
+    "signupButton": "Create Account",
+    "role": {
+      "tenant": "I am looking for a house",
+      "landlord": "I want to list my property"
+    }
+  },
+  "search": {
+    "lookingFor": "Looking For",
+    "enterType": "Enter Type",
+    "price": "Price",
+    "locations": "Locations",
+    "tourName": "Tour Name",
+    "numberOfRooms": "Number Of Rooms",
+    "bedRooms": "Bed Rooms",
+    "searchButton": "Search",
+    "noResults": "No properties found matching your search.",
+    "tryAgain": "Try adjusting your filters.",
+    "allDistricts": "All Districts",
+    "anyPrice": "Any Price",
+    "anyRooms": "Any Rooms",
+    "anyType": "Any Type"
+  }
+}

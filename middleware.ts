@@ -1,3 +1,4 @@
+import createMiddleware from 'next-intl/middleware'
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyToken } from '@/lib/auth'
 
@@ -6,10 +7,21 @@ const AUTH_ROUTES = ['/login', '/register']
 const ADMIN_ROUTES = ['/admin', '/dashboard/admin']
 const LANDLORD_ROUTES = ['/dashboard/landlord']
 
+const intlMiddleware = createMiddleware({
+  locales: ['en', 'rw'],
+  defaultLocale: 'en',
+  localePrefix: 'as-needed'
+})
+
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
   const token = req.cookies.get('inzu_token')?.value
 
+  // Run next-intl middleware first for locale detection
+  const intlResponse = intlMiddleware(req)
+  if (intlResponse) return intlResponse
+
+  // Auth protection logic
   const isProtected = PROTECTED_ROUTES.some((r) => pathname.startsWith(r))
   const isAuthRoute = AUTH_ROUTES.some((r) => pathname.startsWith(r))
 
@@ -55,5 +67,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/admin/:path*', '/login', '/register'],
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)']
 }

@@ -1,33 +1,33 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import type { Language } from '@/lib/i18n'
-import { t as translate } from '@/lib/i18n'
+import { useRouter, usePathname } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
-// NOTE: we read from localStorage to avoid SSR hydration mismatch.
 export function useLanguage() {
-  const [lang, setLang] = useState<Language>('EN')
+  const locale = useLocale()
+  const router = useRouter()
+  const pathname = usePathname()
 
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem('inz_language')
-      if (stored === 'RW' || stored === 'EN') setLang(stored)
-    } catch {
-      // ignore
+  const setLanguage = (newLocale: 'en' | 'rw') => {
+    // Remove the current locale from pathname if it exists
+    const segments = pathname.split('/')
+    const hasLocale = ['en', 'rw'].includes(segments[1])
+    
+    let newPath: string
+    if (hasLocale) {
+      // Replace the current locale
+      segments[1] = newLocale
+      newPath = segments.join('/')
+    } else {
+      // Add the new locale (for non-default locale)
+      newPath = `/${newLocale}${pathname}`
     }
-  }, [])
-
-  const setLanguage = (next: Language) => {
-    setLang(next)
-    try {
-      localStorage.setItem('inz_language', next)
-    } catch {
-      // ignore
-    }
+    
+    router.push(newPath)
   }
 
-  const t = useMemo(() => (key: string) => translate(lang, key), [lang])
-
-  return { lang, setLanguage, t }
+  return { 
+    lang: locale.toUpperCase() as 'EN' | 'RW', 
+    setLanguage 
+  }
 }
-
