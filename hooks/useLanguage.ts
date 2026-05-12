@@ -9,20 +9,9 @@ export function useLanguage() {
   const pathname = usePathname()
 
   const setLanguage = (newLocale: 'en' | 'rw') => {
-    // Get pathname without locale prefix
-    const segments = pathname.split('/')
-    let pathWithoutLocale = pathname
-
-    // Remove locale prefix if present
-    if (['en', 'rw'].includes(segments[1])) {
-      pathWithoutLocale = '/' + segments.slice(2).join('/')
-    }
-
-    // Build new path based on locale
-    // With 'as-needed' prefix, English has no prefix, Kinyarwanda has prefix
-    const newPath = newLocale === 'en' ? pathWithoutLocale : `/${newLocale}${pathWithoutLocale}`
-
-    router.push(newPath)
+    // next-intl's usePathname already returns pathname without locale prefix
+    // We just need to navigate to the same path with the new locale
+    router.push(pathname, { locale: newLocale })
   }
 
   return {
