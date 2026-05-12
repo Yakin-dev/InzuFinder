@@ -16,7 +16,11 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body className="antialiased bg-warm-white text-gray-900">
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider 
+          messages={messages}
+          locale={locale}
+          timeZone="Africa/Kigali"
+        >
           <PageTransition>{children}</PageTransition>
           <Toaster
             position="top-right"

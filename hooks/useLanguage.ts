@@ -9,9 +9,26 @@ export function useLanguage() {
   const pathname = usePathname()
 
   const setLanguage = (newLocale: 'en' | 'rw') => {
-    // next-intl's usePathname already returns pathname without locale prefix
-    // We just need to navigate to the same path with the new locale
-    router.push(pathname, { locale: newLocale })
+    if (newLocale === locale) return
+
+    // Save preference
+    try {
+      localStorage.setItem('inzufinder-locale', newLocale)
+    } catch (e) {}
+
+    // Get current path without locale prefix
+    const currentPath = window.location.pathname
+    const cleanPath = currentPath.startsWith('/rw')
+      ? currentPath.slice(3) || '/'
+      : currentPath
+
+    // Build new path
+    const newPath = newLocale === 'rw'
+      ? '/rw' + (cleanPath === '/' ? '' : cleanPath)
+      : cleanPath
+
+    // Full reload to re-initialize intl provider correctly
+    window.location.href = newPath
   }
 
   return {
