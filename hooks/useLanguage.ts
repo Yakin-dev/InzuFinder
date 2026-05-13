@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
-import { t as translate, type Language } from '@/lib/i18n'
+import { t, type Language } from '@/lib/i18n'
 
 export function useLanguage() {
   const pathname = usePathname()
@@ -32,7 +32,7 @@ export function useLanguage() {
 
   return {
     lang: locale.toUpperCase() as 'EN' | 'RW',
-    t: (key: string) => translate(locale.toUpperCase() as Language, key),
+    t: (key: string) => t(locale.toUpperCase() as Language, key),
     setLanguage
   }
 }

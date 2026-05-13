@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import L from 'leaflet'
+import L, { type LatLngTuple } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import Link from 'next/link'
 import { MapPin } from '@phosphor-icons/react'
@@ -30,7 +30,7 @@ export function MapView({
   className?: string
 }) {
   const points = houses.filter((h) => typeof h.lat === 'number' && typeof h.lng === 'number')
-  const center = points[0] ? ([points[0].lat!, points[0].lng!] as const) : ([-1.9441, 30.0619] as const)
+  const center: LatLngTuple = points[0] ? [points[0].lat!, points[0].lng!] : [-1.9441, 30.0619]
 
   return (
     <div className={cn('card overflow-hidden', className)}>
@@ -57,4 +57,3 @@ export function MapView({
     </div>
   )
 }
-

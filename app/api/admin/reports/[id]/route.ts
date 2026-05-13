@@ -14,7 +14,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
     const { id } = await params
     const body = await req.json()
-    const { status } = body as { status?: string; resolved?: boolean }
+    const { status, resolved } = body as { status?: string; resolved?: boolean }
 
     let nextStatus = typeof status === 'string' ? status : undefined
     if (!nextStatus && typeof resolved === 'boolean') {
