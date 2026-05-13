@@ -12,7 +12,10 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useCompareStore } from '@/hooks/useCompare'
 
-const MapView = dynamic(() => import('@/components/MapView').then((m) => m.MapView), { ssr: false })
+const MapView = dynamic(
+  () => import('@/components/MapView').then((m) => m.MapView).catch(() => () => <div className="p-4 text-center">Map unavailable</div>), 
+  { ssr: false, loading: () => <div className="h-[70vh] bg-gray-100 rounded-xl animate-pulse flex items-center justify-center text-gray-400">Loading map...</div> }
+)
 
 interface House {
   id: string
