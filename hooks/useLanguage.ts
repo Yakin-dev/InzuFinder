@@ -1,38 +1,39 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { useState, useEffect } from 'react'
 import { t, type Language } from '@/lib/i18n'
 
+function getSavedLocale(): 'EN' | 'RW' {
+  if (typeof window === 'undefined') return 'EN'
+  try {
+    const saved = localStorage.getItem('inzufinder-locale')
+    if (saved === 'rw' || saved === 'RW') return 'RW'
+  } catch {}
+  return 'EN'
+}
+
 export function useLanguage() {
-  const pathname = usePathname()
-  const locale = pathname?.startsWith('/rw') ? 'rw' : 'en'
+  const [lang, setLang] = useState<'EN' | 'RW'>(getSavedLocale)
+
+  useEffect(() => {
+    setLang(getSavedLocale())
+  }, [])
 
   const setLanguage = (newLocale: 'en' | 'rw') => {
-    if (newLocale === locale) return
+    const upper = newLocale.toUpperCase() as 'EN' | 'RW'
+    if (upper === lang) return
 
-    // Save preference
     try {
       localStorage.setItem('inzufinder-locale', newLocale)
-    } catch (e) {}
+    } catch {}
 
-    // Get current path without locale prefix
-    const currentPath = window.location.pathname
-    const cleanPath = currentPath.startsWith('/rw')
-      ? currentPath.slice(3) || '/'
-      : currentPath
-
-    // Build new path
-    const newPath = newLocale === 'rw'
-      ? '/rw' + (cleanPath === '/' ? '' : cleanPath)
-      : cleanPath
-
-    // Full reload to re-initialize intl provider correctly
-    window.location.href = newPath
+    // Reload page so every component re-reads the new locale — no route change
+    window.location.reload()
   }
 
   return {
-    lang: locale.toUpperCase() as 'EN' | 'RW',
-    t: (key: string) => t(locale.toUpperCase() as Language, key),
-    setLanguage
+    lang,
+    t: (key: string) => t(lang as Language, key),
+    setLanguage,
   }
 }
