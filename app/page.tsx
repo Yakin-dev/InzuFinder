@@ -110,7 +110,7 @@ export default async function HomePage() {
       <main>
         <section className="relative min-h-[600px] md:min-h-[680px] flex items-end overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600"
+            src='/houses/house1.jpg'
             alt="Modern luxury home in Kigali"
             fill
             className="object-cover"
