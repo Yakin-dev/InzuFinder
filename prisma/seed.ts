@@ -150,7 +150,11 @@ async function main() {
       whatsappNumber: landlord1.phone ?? undefined,
       images: [
         '/houses/house1.jpg',
+<<<<<<< HEAD
         
+=======
+        '/houses/house2.jpg',
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
       ],
     },
     {
@@ -171,7 +175,11 @@ async function main() {
       lat: -1.9344,
       lng: 30.0619,
       whatsappNumber: landlord2.phone ?? undefined,
+<<<<<<< HEAD
       images: ['/houses/house2.jpg'],
+=======
+      images: ['/houses/house3.jpg'],
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
     },
     {
       title: 'Spacious Family House in Remera',
@@ -192,7 +200,11 @@ async function main() {
       lng: 30.1127,
       isFeatured: true,
       whatsappNumber: landlord1.phone ?? undefined,
+<<<<<<< HEAD
       images: ['/houses/house3.jpg'],
+=======
+      images: ['/houses/house1.jpg'],
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
     },
     {
       title: 'Luxury Penthouse in Nyarugenge CBD',
@@ -214,8 +226,13 @@ async function main() {
       isFeatured: true,
       whatsappNumber: landlord2.phone ?? undefined,
       images: [
+<<<<<<< HEAD
         '/houses/house4.jpg',
         
+=======
+        '/houses/house2.jpg',
+        '/houses/house3.jpg',
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
       ],
     },
     {
@@ -236,7 +253,11 @@ async function main() {
       lat: -1.9162,
       lng: 30.1261,
       whatsappNumber: landlord1.phone ?? undefined,
+<<<<<<< HEAD
       images: ['/houses/house5.jpg'],
+=======
+      images: ['/houses/house1.jpg'],
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
     },
     {
       title: 'Executive Villa in Nyarutarama',
@@ -258,8 +279,13 @@ async function main() {
       isFeatured: true,
       whatsappNumber: landlord2.phone ?? undefined,
       images: [
+<<<<<<< HEAD
         '/houses/house6.jpg',
         
+=======
+        '/houses/house2.jpg',
+        '/houses/house3.jpg',
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
       ],
     },
     {
@@ -280,7 +306,11 @@ async function main() {
       lat: -1.9799,
       lng: 30.0378,
       whatsappNumber: landlord1.phone ?? undefined,
+<<<<<<< HEAD
       images: ['/houses/house7.jpg'],
+=======
+      images: ['/houses/house1.jpg'],
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
     },
     {
       title: '3-Bedroom Townhouse in Gikondo',
@@ -300,7 +330,11 @@ async function main() {
       lat: -1.9741,
       lng: 30.0826,
       whatsappNumber: landlord2.phone ?? undefined,
+<<<<<<< HEAD
       images: ['/houses/house8.jpg'],
+=======
+      images: ['/houses/house2.jpg'],
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
     },
     {
       title: 'Modern Apartment in Kibagabaga',
@@ -320,7 +354,11 @@ async function main() {
       lat: -1.9162,
       lng: 30.1089,
       whatsappNumber: landlord1.phone ?? undefined,
+<<<<<<< HEAD
       images: ['/houses/house9.jpg'],
+=======
+      images: ['/houses/house3.jpg'],
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
     },
     {
       title: 'Budget Room near University of Rwanda',
@@ -340,7 +378,229 @@ async function main() {
       lat: -1.965,
       lng: 30.065,
       whatsappNumber: landlord2.phone ?? undefined,
+<<<<<<< HEAD
       images: ['/houses/house10.jpg'],
+=======
+      images: ['/houses/house1.jpg'],
+    },
+    {
+      title: '2-Bedroom Apartment in Kagarama',
+      description:
+        'Bright 2-bedroom apartment in Kagarama with comfortable layout and a secure compound. Ideal for small families.',
+      price: 200000,
+      location: 'Kagarama',
+      district: 'Kicukiro',
+      type: 'APARTMENT',
+      category: 'RESIDENTIAL',
+      availability: 'VISIT_BOOKED',
+      furnished: true,
+      bedrooms: 2,
+      bathrooms: 1,
+      size: 68,
+      floor: 1,
+      lat: -1.9879,
+      lng: 30.0977,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['/houses/house2.jpg'],
+    },
+    {
+      title: 'Student Studio near INES-Ruhengeri',
+      description:
+        'Compact studio with efficient layout, good ventilation, and quick access to transport routes. Student-friendly budget.',
+      price: 80000,
+      location: 'Gikondo',
+      district: 'Kicukiro',
+      type: 'STUDIO',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: true,
+      bedrooms: 1,
+      bathrooms: 1,
+      size: 28,
+      floor: 1,
+      lat: -1.97,
+      lng: 30.08,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['/houses/house3.jpg'],
+    },
+    {
+      title: 'Elegant 4-Bed House in Kimironko',
+      description:
+        'Elegant furnished home near Kimironko with strong access to markets and main routes. Great for a larger household.',
+      price: 550000,
+      location: 'Kimironko',
+      district: 'Gasabo',
+      type: 'HOUSE',
+      category: 'RESIDENTIAL',
+      availability: 'UNDER_NEGOTIATION',
+      furnished: true,
+      bedrooms: 4,
+      bathrooms: 3,
+      size: 220,
+      floor: 0,
+      lat: -1.94,
+      lng: 30.12,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['/houses/house1.jpg'],
+    },
+    {
+      title: 'Furnished Room near Kigali Convention Centre',
+      description:
+        'Furnished room near central Kigali with quick commute to CBD and Convention Centre. Quiet compound and dependable utilities.',
+      price: 90000,
+      location: 'CBD',
+      district: 'Nyarugenge',
+      type: 'ROOM',
+      category: 'RESIDENTIAL',
+      availability: 'AVAILABLE',
+      furnished: true,
+      bedrooms: 1,
+      bathrooms: 1,
+      size: 18,
+      floor: 0,
+      lat: -1.948,
+      lng: 30.059,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['/houses/house2.jpg'],
+    },
+
+    // Commercial (6)
+    {
+      title: 'Prime Shop Space in Kimironko Market',
+      description:
+        'High-foot-traffic shop space in Kimironko Market zone. Best for retail, mobile money, fashion, or mini-mart.',
+      price: 180000,
+      location: 'Kimironko Market',
+      district: 'Gasabo',
+      type: 'SHOP',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 1,
+      size: 40,
+      floor: 0,
+      lat: -1.94,
+      lng: 30.12,
+      isFeatured: true,
+      footTraffic: 'HIGH',
+      nearMainRoad: true,
+      hasParking: false,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['/houses/house3.jpg'],
+    },
+    {
+      title: 'Office Space in Kigali Business District',
+      description:
+        'Professional office space in the Business District with great access, parking, and strong visibility for client visits.',
+      price: 450000,
+      location: 'Business District',
+      district: 'Nyarugenge',
+      type: 'OFFICE',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 1,
+      size: 85,
+      floor: 3,
+      lat: -1.9536,
+      lng: 30.0606,
+      footTraffic: 'HIGH',
+      hasParking: true,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['/houses/house1.jpg'],
+    },
+    {
+      title: 'Mini-Supermarket Space in Remera',
+      description:
+        'Retail space suited for mini-supermarket operations. Good frontage, parking, and quick supply access.',
+      price: 250000,
+      location: 'Remera',
+      district: 'Gasabo',
+      type: 'SHOP',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 1,
+      size: 65,
+      floor: 0,
+      lat: -1.9551,
+      lng: 30.1127,
+      footTraffic: 'MEDIUM',
+      nearMainRoad: true,
+      hasParking: true,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['/houses/house2.jpg'],
+    },
+    {
+      title: 'Restaurant Space in Nyamirambo',
+      description:
+        'Restaurant-ready commercial space in Nyamirambo with high foot traffic and strong community demand. Great evening flow.',
+      price: 150000,
+      location: 'Nyamirambo',
+      district: 'Nyarugenge',
+      type: 'RESTAURANT',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 2,
+      size: 90,
+      floor: 0,
+      lat: -1.9799,
+      lng: 30.0378,
+      footTraffic: 'HIGH',
+      hasParking: false,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['/houses/house3.jpg'],
+    },
+    {
+      title: 'Event Hall in Gikondo',
+      description:
+        'Flexible event hall for ceremonies, trainings, and community events. Good access and parking. Secure premises.',
+      price: 500000,
+      location: 'Gikondo',
+      district: 'Kicukiro',
+      type: 'HALL',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 2,
+      size: 260,
+      floor: 0,
+      lat: -1.9741,
+      lng: 30.0826,
+      footTraffic: 'MEDIUM',
+      hasParking: true,
+      whatsappNumber: landlord1.phone ?? undefined,
+      images: ['/houses/house1.jpg'],
+    },
+    {
+      title: 'Warehouse in Masoro Industrial Zone',
+      description:
+        'Warehouse suited for logistics and storage with main-road access and parking for operations. Ideal for SME supply chains.',
+      price: 350000,
+      location: 'Masoro Industrial Zone',
+      district: 'Gasabo',
+      type: 'WAREHOUSE',
+      category: 'COMMERCIAL',
+      availability: 'AVAILABLE',
+      furnished: false,
+      bedrooms: 0,
+      bathrooms: 1,
+      size: 400,
+      floor: 0,
+      lat: -1.89,
+      lng: 30.05,
+      footTraffic: 'LOW',
+      nearMainRoad: true,
+      hasParking: true,
+      whatsappNumber: landlord2.phone ?? undefined,
+      images: ['/houses/house2.jpg'],
+>>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
     },
   ]
 
