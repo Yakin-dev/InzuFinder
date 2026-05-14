@@ -109,15 +109,15 @@ export default async function HomePage() {
       <Header />
       <main>
         <section className="relative min-h-[600px] md:min-h-[680px] flex items-end overflow-hidden">
-          <Image
-            src="/houses/house1.jpg"
-            alt="Modern luxury home in Kigali"
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-            unoptimized
-          />
+        <Image
+  src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1600&q=80"
+  alt="Modern luxury home in Kigali"
+  fill
+  className="object-cover"
+  priority
+  sizes="100vw"
+  unoptimized
+/>
 
           <div className="absolute inset-0 hero-overlay" />
           <HomeHero />

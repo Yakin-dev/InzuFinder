@@ -149,12 +149,8 @@ async function main() {
       isFeatured: true,
       whatsappNumber: landlord1.phone ?? undefined,
       images: [
-        '/houses/house1.jpg',
-<<<<<<< HEAD
-        
-=======
-        '/houses/house2.jpg',
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+        'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200',
+        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200',
       ],
     },
     {
@@ -175,11 +171,7 @@ async function main() {
       lat: -1.9344,
       lng: 30.0619,
       whatsappNumber: landlord2.phone ?? undefined,
-<<<<<<< HEAD
-      images: ['/houses/house2.jpg'],
-=======
-      images: ['/houses/house3.jpg'],
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+      images: ['https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200'],
     },
     {
       title: 'Spacious Family House in Remera',
@@ -200,11 +192,7 @@ async function main() {
       lng: 30.1127,
       isFeatured: true,
       whatsappNumber: landlord1.phone ?? undefined,
-<<<<<<< HEAD
-      images: ['/houses/house3.jpg'],
-=======
-      images: ['/houses/house1.jpg'],
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+      images: ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200'],
     },
     {
       title: 'Luxury Penthouse in Nyarugenge CBD',
@@ -226,13 +214,8 @@ async function main() {
       isFeatured: true,
       whatsappNumber: landlord2.phone ?? undefined,
       images: [
-<<<<<<< HEAD
-        '/houses/house4.jpg',
-        
-=======
-        '/houses/house2.jpg',
-        '/houses/house3.jpg',
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+        'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200',
+        'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=1200',
       ],
     },
     {
@@ -253,11 +236,7 @@ async function main() {
       lat: -1.9162,
       lng: 30.1261,
       whatsappNumber: landlord1.phone ?? undefined,
-<<<<<<< HEAD
-      images: ['/houses/house5.jpg'],
-=======
-      images: ['/houses/house1.jpg'],
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+      images: ['https://images.unsplash.com/photo-1554995207-c18c203602cb?w=1200'],
     },
     {
       title: 'Executive Villa in Nyarutarama',
@@ -279,13 +258,8 @@ async function main() {
       isFeatured: true,
       whatsappNumber: landlord2.phone ?? undefined,
       images: [
-<<<<<<< HEAD
-        '/houses/house6.jpg',
-        
-=======
-        '/houses/house2.jpg',
-        '/houses/house3.jpg',
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+        'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200',
+        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200',
       ],
     },
     {
@@ -306,11 +280,7 @@ async function main() {
       lat: -1.9799,
       lng: 30.0378,
       whatsappNumber: landlord1.phone ?? undefined,
-<<<<<<< HEAD
-      images: ['/houses/house7.jpg'],
-=======
-      images: ['/houses/house1.jpg'],
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+      images: ['https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=1200'],
     },
     {
       title: '3-Bedroom Townhouse in Gikondo',
@@ -330,11 +300,7 @@ async function main() {
       lat: -1.9741,
       lng: 30.0826,
       whatsappNumber: landlord2.phone ?? undefined,
-<<<<<<< HEAD
-      images: ['/houses/house8.jpg'],
-=======
-      images: ['/houses/house2.jpg'],
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+      images: ['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1200'],
     },
     {
       title: 'Modern Apartment in Kibagabaga',
@@ -354,11 +320,7 @@ async function main() {
       lat: -1.9162,
       lng: 30.1089,
       whatsappNumber: landlord1.phone ?? undefined,
-<<<<<<< HEAD
-      images: ['/houses/house9.jpg'],
-=======
-      images: ['/houses/house3.jpg'],
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+      images: ['https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200'],
     },
     {
       title: 'Budget Room near University of Rwanda',
@@ -378,10 +340,7 @@ async function main() {
       lat: -1.965,
       lng: 30.065,
       whatsappNumber: landlord2.phone ?? undefined,
-<<<<<<< HEAD
-      images: ['/houses/house10.jpg'],
-=======
-      images: ['/houses/house1.jpg'],
+      images: ['https://images.unsplash.com/photo-1551516594-56cb78394645?w=1200'],
     },
     {
       title: '2-Bedroom Apartment in Kagarama',
@@ -401,7 +360,7 @@ async function main() {
       lat: -1.9879,
       lng: 30.0977,
       whatsappNumber: landlord1.phone ?? undefined,
-      images: ['/houses/house2.jpg'],
+      images: ['https://images.unsplash.com/photo-1523217582562-09d0def993a6?w=1200'],
     },
     {
       title: 'Student Studio near INES-Ruhengeri',
@@ -421,7 +380,7 @@ async function main() {
       lat: -1.97,
       lng: 30.08,
       whatsappNumber: landlord2.phone ?? undefined,
-      images: ['/houses/house3.jpg'],
+      images: ['https://images.unsplash.com/photo-1527030280862-64139fba04ca?w=1200'],
     },
     {
       title: 'Elegant 4-Bed House in Kimironko',
@@ -441,7 +400,7 @@ async function main() {
       lat: -1.94,
       lng: 30.12,
       whatsappNumber: landlord1.phone ?? undefined,
-      images: ['/houses/house1.jpg'],
+      images: ['https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200'],
     },
     {
       title: 'Furnished Room near Kigali Convention Centre',
@@ -461,7 +420,7 @@ async function main() {
       lat: -1.948,
       lng: 30.059,
       whatsappNumber: landlord2.phone ?? undefined,
-      images: ['/houses/house2.jpg'],
+      images: ['https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1200'],
     },
 
     // Commercial (6)
@@ -487,7 +446,7 @@ async function main() {
       nearMainRoad: true,
       hasParking: false,
       whatsappNumber: landlord1.phone ?? undefined,
-      images: ['/houses/house3.jpg'],
+      images: ['https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?w=1200'],
     },
     {
       title: 'Office Space in Kigali Business District',
@@ -509,7 +468,7 @@ async function main() {
       footTraffic: 'HIGH',
       hasParking: true,
       whatsappNumber: landlord2.phone ?? undefined,
-      images: ['/houses/house1.jpg'],
+      images: ['https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200'],
     },
     {
       title: 'Mini-Supermarket Space in Remera',
@@ -532,7 +491,7 @@ async function main() {
       nearMainRoad: true,
       hasParking: true,
       whatsappNumber: landlord1.phone ?? undefined,
-      images: ['/houses/house2.jpg'],
+      images: ['https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=1200'],
     },
     {
       title: 'Restaurant Space in Nyamirambo',
@@ -554,7 +513,7 @@ async function main() {
       footTraffic: 'HIGH',
       hasParking: false,
       whatsappNumber: landlord2.phone ?? undefined,
-      images: ['/houses/house3.jpg'],
+      images: ['https://images.unsplash.com/photo-1552566626-52f8b828add9?w=1200'],
     },
     {
       title: 'Event Hall in Gikondo',
@@ -576,7 +535,7 @@ async function main() {
       footTraffic: 'MEDIUM',
       hasParking: true,
       whatsappNumber: landlord1.phone ?? undefined,
-      images: ['/houses/house1.jpg'],
+      images: ['https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=1200'],
     },
     {
       title: 'Warehouse in Masoro Industrial Zone',
@@ -599,8 +558,7 @@ async function main() {
       nearMainRoad: true,
       hasParking: true,
       whatsappNumber: landlord2.phone ?? undefined,
-      images: ['/houses/house2.jpg'],
->>>>>>> db84bc9bc1561c4ad42567cd6f097ec2ac40a96c
+      images: ['https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200'],
     },
   ]
 
